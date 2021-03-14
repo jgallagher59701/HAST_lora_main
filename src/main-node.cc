@@ -4,7 +4,7 @@
   by jhrg
 
   Modified to use the ESP8266 'NodeMCU' board since the AT328 does not
-  have enough memory for the SD card, LoRa dn DS3231 clock.
+  have enough memory for the SD card, LoRa and DS3231 clock.
   10/24/20
 */
 
@@ -20,27 +20,28 @@
 
 #include "data_packet.h"
 
-#define BUILD_ESP8266_NODEMCU 1
-
 #if BUILD_ESP8266_NODEMCU
 #define RFM95_RST D0 // GPIO 16
 #define RFM95_INT D2 // GPIO 4
 #define RFM95_CS D8  // GPIO 15
-#define BAUD_RATE 115200
-//#define LED LED_BUILTIN
-#elif BUILD_PRO_MINI
-#define RFM95_INT 3 // INT1
-#define RFM95_CS 5
-#define RFM95_RST 6
-#define BAUD_RATE 9600
-#else
-#error "Must define on of BUILD_PRO_MINI or BUILD_ESP8266_NODEMCU"
-#endif
 
 #define I2C_SDA D3 // GPIO 0
 #define I2C_SCL D1 // GPIO 5
 
 #define SD_CS 10 // SDD3
+
+#define BAUD_RATE 115200
+
+//#define LED LED_BUILTIN
+#elif BUILD_PRO_MINI
+#define RFM95_INT 3 // INT1
+#define RFM95_CS 5
+#define RFM95_RST 6
+
+#define BAUD_RATE 9600
+#else
+#error "Must define on of BUILD_PRO_MINI or BUILD_ESP8266_NODEMCU"
+#endif
 
 #define SD 1
 #define LORA 1
@@ -59,9 +60,8 @@ RHReliableDatagram rf95_manager(rf95, MAIN_NODE_ADDRESS);
 
 // #define FREQUENCY 915.0
 #define FREQUENCY 902.3
-#define SIGNAL_STRENTH 13 // dBm
+#define SIGNAL_STRENGTH 13 // dBm
 
-// Use these settings:
 // Use these settings:
 #define BANDWIDTH 125000
 #define SPREADING_FACTOR 10
@@ -209,7 +209,7 @@ void print_rfm95_info() {
 void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(RFM95_RST, OUTPUT);
-    pinMode(RFM95_CS, OUTPUT); // TODO not need once RFM works
+    pinMode(RFM95_CS, OUTPUT);
     pinMode(SD_CS, OUTPUT);
 
     digitalWrite(RFM95_RST, HIGH);
@@ -267,7 +267,7 @@ void setup() {
         // Setup ISM FREQUENCY
         rf95.setFrequency(FREQUENCY);
         // Setup Power,dBm
-        rf95.setTxPower(SIGNAL_STRENTH);
+        rf95.setTxPower(SIGNAL_STRENGTH);
         // Setup Spreading Factor (CPS == 2^n, N is 6 ~ 12)
         rf95.setSpreadingFactor(SPREADING_FACTOR);
         // Setup BandWidth, option: 7800,10400,15600,20800,31200,41700,62500,125000,250000,500000
