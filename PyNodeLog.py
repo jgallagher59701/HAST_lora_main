@@ -6,7 +6,9 @@ import csv
 # RocketScream
 # usb_port = "/dev/cu.usbmodem142101"
 # ESP8266
-usb_port = "/dev/tty.SLAB_USBtoUART"
+# usb_port = "/dev/tty.SLAB_USBtoUART"
+# Adafruite feather M0
+usb_port = "/dev/tty.usbmodem14101"
 
 ser = serial.Serial(usb_port, 115200)
 ser.flushInput()

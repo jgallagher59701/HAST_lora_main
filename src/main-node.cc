@@ -15,7 +15,8 @@
 #include <SPI.h>
 #include <SdFat.h>
 
-#include <RTClibExtended.h>
+//#include <RTClibExtended.h>
+#include <RTClib.h>
 #include <Wire.h>
 
 #include "data_packet.h"
@@ -33,30 +34,28 @@
 #define BAUD_RATE 115200
 
 //#define LED LED_BUILTIN
-#elif BUILD_PRO_MINI
-#define RFM95_INT 3 // INT1
-#define RFM95_CS 5
-#define RFM95_RST 6
+#elif FEATHER_M0
+#define RFM95_INT 3
+#define RFM95_CS 8
+#define RFM95_RST 4
+
+#define I2C_SDA 20
+#define I2C_SCL 21
+
+#define SD_CS 10
 
 #define BAUD_RATE 9600
 #else
 #error "Must define on of BUILD_PRO_MINI or BUILD_ESP8266_NODEMCU"
 #endif
 
-#define SD 1
+#define SD 0
 #define LORA 1
 
 // Real time clock
-RTC_DS3231 RTC; // we are using the DS3231 RTC
+RTC_DS3231 DS3231; // we are using the DS3231 RTC
 
-#if LORA
 #define MAIN_NODE_ADDRESS 0
-
-// Singleton instance of the radio driver
-RH_RF95 rf95(RFM95_CS, RFM95_INT);
-// Singleton instance for the reliable datagram manager
-RHReliableDatagram rf95_manager(rf95, MAIN_NODE_ADDRESS);
-#endif
 
 // #define FREQUENCY 915.0
 #define FREQUENCY 902.3
@@ -66,8 +65,14 @@ RHReliableDatagram rf95_manager(rf95, MAIN_NODE_ADDRESS);
 #define BANDWIDTH 125000
 #define SPREADING_FACTOR 10
 #define CODING_RATE 5
-
 // RH_CAD_DEFAULT_TIMEOUT 10seconds
+
+#if LORA
+// Singleton instance of the radio driver
+RH_RF95 rf95(RFM95_CS, RFM95_INT);
+// Singleton instance for the reliable datagram manager
+RHReliableDatagram rf95_manager(rf95, MAIN_NODE_ADDRESS);
+#endif
 
 #if SD
 // Singletons for the SD card objects
@@ -141,8 +146,9 @@ void write_header(const char *file_name) {
 
     yield_spi_to_sd();
 
-    cli();  // disable interrupts
+    noInterrupts();  // disable interrupts
 
+#if SD
     if (!file.open(file_name, O_WRONLY | O_CREAT | O_APPEND)) {
         Serial.println(F("Couldn't write file header"));
         sd_card_status = false;
@@ -152,8 +158,8 @@ void write_header(const char *file_name) {
     file.println(F("# Start Log"));
     file.println(F("# Node, Message, Time, Battery V, Last TX Dur ms, Temp C, Hum %, Status"));
     file.close();
-
-    sei();  // enable interrupts
+#endif
+    interrupts();  // enable interrupts
 }
 
 /**
@@ -168,16 +174,18 @@ void log_data(const char *file_name, const char *data) {
         return;
 
     yield_spi_to_sd();
-    cli();  // disable interrupts
+    noInterrupts();  // disable interrupts
 
+#if SD
     if (file.open(file_name, O_WRONLY | O_CREAT | O_APPEND)) {
         file.println(data);
         file.close();
     } else {
         Serial.print(F("Failed to log data."));
     }
+#endif
 
-    sei();  // enable interrupts
+    interrupts();  // enable interrupts
 }
 
 void status_on() {
@@ -212,7 +220,7 @@ void setup() {
     pinMode(RFM95_CS, OUTPUT);
     pinMode(SD_CS, OUTPUT);
 
-    digitalWrite(RFM95_RST, HIGH);
+    // digitalWrite(RFM95_CS, HIGH);
 
     Serial.begin(BAUD_RATE);
     Serial.println(F("boot"));
@@ -284,10 +292,12 @@ void setup() {
     }
 #endif
 
-    Serial.print(F("Current time: "));
-    Serial.println(iso8601_date_time(RTC.now()));
+    Serial.print(F("Startup time: "));
+    Serial.println(iso8601_date_time(DS3231.now()));
 
     Serial.flush();
+
+    status_off();
 }
 
 uint8_t rf95_buf[RH_RF95_MAX_MESSAGE_LEN];
@@ -300,7 +310,7 @@ void loop() {
 
         Serial.println();
         Serial.print(F("Current time: "));
-        Serial.println(iso8601_date_time(RTC.now()));
+        Serial.println(iso8601_date_time(DS3231.now()));
 
         uint8_t len = sizeof(rf95_buf);
         uint8_t from, to, id, header;
@@ -329,15 +339,15 @@ void loop() {
 #if REPLY
                 // Send a reply that includes a time code (unixtime)
                 yield_spi_to_rf95();
-                uint32_t now = RTC.now().unixtime();
+                uint32_t now = DS3231.now().unixtime();
                 unsigned long start = millis();
                 if (rf95_manager.sendtoWait((uint8_t *)&now, sizeof(now), from)) {
-                    snprintf(msg, 256, "...sent a reply, %d retransmissions, %ld ms", rf95_manager.retransmissions(),
+                    snprintf(msg, 256, "...sent a reply, %ld retransmissions, %ld ms", rf95_manager.retransmissions(),
                              millis() - start);
                     Serial.println(msg);
                     Serial.flush();
                 } else {
-                    snprintf(msg, 256, "...reply failed, %d retransmissions, %ld ms", rf95_manager.retransmissions(),
+                    snprintf(msg, 256, "...reply failed, %ld retransmissions, %ld ms", rf95_manager.retransmissions(),
                              millis() - start);
                     Serial.println(msg);
                     Serial.flush();
