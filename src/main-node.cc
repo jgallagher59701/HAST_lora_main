@@ -21,6 +21,11 @@
 
 #include "data_packet.h"
 
+#if defined(ARDUINO_SAMD_ZERO) && defined(SERIAL_PORT_USBVIRTUAL)
+// Required for Serial on Zero based boards
+#define Serial SERIAL_PORT_USBVIRTUAL
+#endif
+
 #if BUILD_ESP8266_NODEMCU
 #define RFM95_RST D0 // GPIO 16
 #define RFM95_INT D2 // GPIO 4
@@ -44,12 +49,12 @@
 
 #define SD_CS 10
 
-#define BAUD_RATE 9600
+#define BAUD_RATE 115200
 #else
 #error "Must define on of BUILD_PRO_MINI or BUILD_ESP8266_NODEMCU"
 #endif
 
-#define SD 0
+#define SD 1
 #define LORA 1
 
 // Real time clock
@@ -89,7 +94,7 @@ bool sd_card_status = false; // true == SD card init'd
 // Given a DateTime instance, return a pointer to static string that holds
 // an ISO 8601 print representation of the object.
 
-char *iso8601_date_time(DateTime t) {
+char *iso8601_date_time(DateTime &t) {
     static char date_time_str[32];
 
     char val[12];
@@ -146,7 +151,7 @@ void write_header(const char *file_name) {
 
     yield_spi_to_sd();
 
-    noInterrupts();  // disable interrupts
+    noInterrupts(); // disable interrupts
 
 #if SD
     if (!file.open(file_name, O_WRONLY | O_CREAT | O_APPEND)) {
@@ -159,7 +164,7 @@ void write_header(const char *file_name) {
     file.println(F("# Node, Message, Time, Battery V, Last TX Dur ms, Temp C, Hum %, Status"));
     file.close();
 #endif
-    interrupts();  // enable interrupts
+    interrupts(); // enable interrupts
 }
 
 /**
@@ -174,7 +179,7 @@ void log_data(const char *file_name, const char *data) {
         return;
 
     yield_spi_to_sd();
-    noInterrupts();  // disable interrupts
+    noInterrupts(); // disable interrupts
 
 #if SD
     if (file.open(file_name, O_WRONLY | O_CREAT | O_APPEND)) {
@@ -185,15 +190,15 @@ void log_data(const char *file_name, const char *data) {
     }
 #endif
 
-    interrupts();  // enable interrupts
+    interrupts(); // enable interrupts
 }
 
 void status_on() {
-    digitalWrite(LED_BUILTIN, LOW);
+    digitalWrite(LED_BUILTIN, HIGH);
 }
 
 void status_off() {
-    digitalWrite(LED_BUILTIN, HIGH);
+    digitalWrite(LED_BUILTIN, LOW);
 }
 
 void yield(unsigned long duration_ms) {
@@ -223,8 +228,10 @@ void setup() {
     // digitalWrite(RFM95_CS, HIGH);
 
     Serial.begin(BAUD_RATE);
+    while (!Serial) {
+        // wait for the Serial interface to come up
+    }
     Serial.println(F("boot"));
-    Serial.flush();
 
     int sda = I2C_SDA;
     int scl = I2C_SCL;
@@ -238,16 +245,15 @@ void setup() {
 
     // Initialize at the highest speed supported by the board that is
     // not over 50 MHz. Try a lower speed if SPI errors occur.
-    if (sd.begin(SD_CS, SD_SCK_MHZ(50))) {
+    if (sd.begin(SD_CS, SPI_HALF_SPEED)) { //, SD_SCK_MHZ(50))) {
         Serial.println(F(" OK"));
         sd_card_status = true;
     } else {
         Serial.println(F(" Couldn't init the SD Card"));
         sd_card_status = false;
     }
-
-    Serial.flush();
 #endif
+
     // Write data header.
     write_header(FILE_NAME);
 
@@ -292,8 +298,25 @@ void setup() {
     }
 #endif
 
+    if (!DS3231.begin()) {
+        Serial.println("Couldn't find DS3231");
+        //Serial.flush();
+        // abort();
+    }
+
+    if (DS3231.lostPower()) {
+        Serial.println("RTC lost power, let's set the time!");
+        // When time needs to be set on a new device, or after a power loss, the
+        // following line sets the RTC to the date & time this sketch was compiled
+        DS3231.adjust(DateTime(F(__DATE__), F(__TIME__)));
+        // This line sets the RTC with an explicit date & time, for example to set
+        // January 21, 2014 at 3am you would call:
+        // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
+    }
+
     Serial.print(F("Startup time: "));
-    Serial.println(iso8601_date_time(DS3231.now()));
+    DateTime t = DS3231.now();
+    Serial.println(iso8601_date_time(t));
 
     Serial.flush();
 
@@ -310,7 +333,8 @@ void loop() {
 
         Serial.println();
         Serial.print(F("Current time: "));
-        Serial.println(iso8601_date_time(DS3231.now()));
+        DateTime t = DS3231.now();
+        Serial.println(iso8601_date_time(t));
 
         uint8_t len = sizeof(rf95_buf);
         uint8_t from, to, id, header;
