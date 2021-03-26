@@ -14,8 +14,6 @@
 #include <RH_RF95.h>
 #include <SPI.h>
 #include <SdFat.h>
-
-//#include <RTClibExtended.h>
 #include <RTClib.h>
 #include <Wire.h>
 
@@ -51,7 +49,7 @@
 
 #define BAUD_RATE 115200
 #else
-#error "Must define on of BUILD_PRO_MINI or BUILD_ESP8266_NODEMCU"
+#error "Must define on of FEATHER_M0 or BUILD_ESP8266_NODEMCU"
 #endif
 
 #define SD 1
