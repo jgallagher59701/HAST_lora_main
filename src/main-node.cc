@@ -18,6 +18,7 @@
 #include <Wire.h>
 
 #include "data_packet.h"
+#include "messages.h"
 
 #if defined(ARDUINO_SAMD_ZERO) && defined(SERIAL_PORT_USBVIRTUAL)
 // Required for Serial on Zero based boards
@@ -339,8 +340,19 @@ void loop() {
         char msg[256];
         if (rf95_manager.recvfromAck(rf95_buf, &len, &from, &to, &id, &header)) {
 
-            snprintf(msg, 256, "Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x",
-                     len, from, to, id, header);
+            if (len == sizeof(packet_t)) {  // TODO add type to data packet. 3/26/21
+                snprintf(msg, 256,
+                         "Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x, type: %s",
+                         len, from, to, id, header, "data packet");
+            }
+            else {
+                snprintf(msg, 256,
+                         "Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x, type: %s",
+                         len, from, to, id, header,
+                         get_message_type_string(get_message_type((char *) rf95_buf)));
+
+            }
+
             Serial.println(msg);
             Serial.flush();
 
@@ -378,15 +390,28 @@ void loop() {
                 rf95_manager.resetRetransmissions();
 #endif
             } else {
-                Serial.print(F("Got: "));
-                // Add a null to the end of the packet and print as text
-                //rf95_buf[len] = 0;
-                Serial.println((char *)&rf95_buf);
+                switch (get_message_type((char *) rf95_buf)) {
+                    case join_request:
+                        break;
 
-                Serial.print(F("RFM95 info: "));
-                print_rfm95_info();
+                    case time_request:
+                        break;
 
-                log_data(FILE_NAME, (char *)&rf95_buf);
+                    case text:
+                        Serial.print(F("Got: "));
+                        // Add a null to the end of the packet and print as text
+                        //rf95_buf[len] = 0;
+                        Serial.println((char *)&rf95_buf);
+
+                        Serial.print(F("RFM95 info: "));
+                        print_rfm95_info();
+
+                        log_data(FILE_NAME, (char *)&rf95_buf);
+                        break;
+
+                    default:
+                        Serial.println(F("Got unrecognized message."));
+                }
             }
         }
 
