@@ -26,6 +26,7 @@
 #endif
 
 #if BUILD_ESP8266_NODEMCU
+
 #define RFM95_RST D0 // GPIO 16
 #define RFM95_INT D2 // GPIO 4
 #define RFM95_CS D8  // GPIO 15
@@ -38,6 +39,7 @@
 #define BAUD_RATE 115200
 
 #elif FEATHER_M0
+
 #define RFM95_INT 3
 #define RFM95_CS 8
 #define RFM95_RST 4
@@ -48,11 +50,12 @@
 #define SD_CS 10
 
 #define BAUD_RATE 115200
-#else
-#error "Must define on of FEATHER_M0 or BUILD_ESP8266_NODEMCU"
-#endif
 
-#define SD 1
+#else
+
+#error "Must define on of FEATHER_M0 or BUILD_ESP8266_NODEMCU"
+
+#endif
 
 // Real time clock
 RTC_DS3231 DS3231; // we are using the DS3231 RTC
@@ -309,7 +312,6 @@ void setup() {
     status_off();
 }
 
-
 /**
  * @brief Send a reply that includes a time code (unixtime)
  * @note Resets the rf95 manager's retransmissions counter
@@ -323,12 +325,12 @@ void send_time_as_reply(uint8_t from)
     uint32_t now = DS3231.now().unixtime();
     unsigned long start = millis();
     if (rf95_manager.sendtoWait((uint8_t *)&now, sizeof(now), from)) {
-        snprintf(msg, RH_RF95_MAX_MESSAGE_LEN, "...sent a reply, %d retransmissions, %ld ms", rf95_manager.retransmissions(),
+        snprintf(msg, RH_RF95_MAX_MESSAGE_LEN, "...sent a reply, %ld retransmissions, %ld ms", rf95_manager.retransmissions(),
                  millis() - start);
         Serial.println(msg);
         Serial.flush();
     } else {
-        snprintf(msg, RH_RF95_MAX_MESSAGE_LEN, "...reply failed, %d retransmissions, %ld ms", rf95_manager.retransmissions(),
+        snprintf(msg, RH_RF95_MAX_MESSAGE_LEN, "...reply failed, %ld retransmissions, %ld ms", rf95_manager.retransmissions(),
                  millis() - start);
         Serial.println(msg);
         Serial.flush();
@@ -371,19 +373,19 @@ void loop() {
             Serial.println(msg);
             Serial.flush();
 
-            MessageType type = (len == sizeof(packet_t)) ? data_packet : get_message_type((char *) rf95_buf);
+            MessageType type = (len == sizeof(packet_t)) ? data_packet : get_message_type((char *)rf95_buf);
 
             switch (type) {
                 case data_packet: {             // Compatibility with the original packet_t
                     // Print received packet
                     Serial.print(F("Data: "));
-                    Serial.print(data_packet_to_string((packet_t *)&rf95_buf, /* pretty */ true));
+                    Serial.print(data_packet_to_string((packet_t *)rf95_buf, /* pretty */ true));
 
                     Serial.print(F(", "));
                     print_rfm95_info();
 
                     // log reading to the SD card
-                    const char *pretty_buf = data_packet_to_string((packet_t *)&rf95_buf, false);
+                    const char *pretty_buf = data_packet_to_string((packet_t *)rf95_buf, false);
                     log_data(FILE_NAME, pretty_buf);
 #if REPLY
                     send_time_as_reply(from);
@@ -391,21 +393,17 @@ void loop() {
                     break;
                 }
 
-
                 case data_message: {            // New data message with type indicator
                     // Print received packet
                     Serial.print(F("Data: "));
-                    Serial.print(data_message_to_string((data_message_t *)&rf95_buf, /* pretty */ true));
+                    Serial.print(data_message_to_string((data_message_t *)rf95_buf, /* pretty */ true));
 
                     Serial.print(F(", "));
                     print_rfm95_info();
 
                     // log reading to the SD card, not pretty-printed
-                    const char *pretty_buf = data_message_to_string((data_message_t *)&rf95_buf, false);
+                    const char *pretty_buf = data_message_to_string((data_message_t *)rf95_buf, false);
                     log_data(FILE_NAME, pretty_buf);
-#if REPLY
-                    send_time_as_reply(from);
-#endif
                     break;
                 }
 
@@ -415,84 +413,24 @@ void loop() {
                 case time_request:
                     break;
 
-                case text:
-                    // TODO Fix this for the new text message format. 4/10/21
+                case text: {
                     Serial.print(F("Got: "));
                     // Add a null to the end of the packet and print as text
                     //rf95_buf[len] = 0;
-                    Serial.println((char *)&rf95_buf);
+                    Serial.println(text_message_to_string((text_t *)rf95_buf, true /*pretty*/));
 
                     Serial.print(F("RFM95 info: "));
                     print_rfm95_info();
 
-                    log_data(FILE_NAME, (char *)&rf95_buf);
+                    log_data(FILE_NAME, text_message_to_string((text_t *)rf95_buf, false /*pretty*/));
                     break;
-
+                }
+ 
                 default:
                     Serial.println(F("Got unrecognized message."));
             }
         }
 
-#if 0
-            if (len == sizeof(packet_t)) {
-
-                // Print received packet
-                Serial.print(F("Data: "));
-                Serial.print(data_packet_to_string((packet_t *)&rf95_buf, /* pretty */ true));
-
-                Serial.print(F(", "));
-                print_rfm95_info();
-
-                // log reading to the SD card
-                const char *pretty_buf = data_packet_to_string((packet_t *)&rf95_buf, false);
-                log_data(FILE_NAME, pretty_buf);
-
-                // yield(1000); Not needed
-#if REPLY
-                // Send a reply that includes a time code (unixtime)
-                yield_spi_to_rf95();
-                uint32_t now = DS3231.now().unixtime();
-                unsigned long start = millis();
-                if (rf95_manager.sendtoWait((uint8_t *)&now, sizeof(now), from)) {
-                    snprintf(msg, 256, "...sent a reply, %ld retransmissions, %ld ms", rf95_manager.retransmissions(),
-                             millis() - start);
-                    Serial.println(msg);
-                    Serial.flush();
-                } else {
-                    snprintf(msg, 256, "...reply failed, %ld retransmissions, %ld ms", rf95_manager.retransmissions(),
-                             millis() - start);
-                    Serial.println(msg);
-                    Serial.flush();
-                }
-
-                rf95_manager.resetRetransmissions();
-#endif  // REPLY
-            } else {
-                switch (get_message_type((char *) rf95_buf)) {
-                    case join_request:
-                        break;
-
-                    case time_request:
-                        break;
-
-                    case text:
-                        Serial.print(F("Got: "));
-                        // Add a null to the end of the packet and print as text
-                        //rf95_buf[len] = 0;
-                        Serial.println((char *)&rf95_buf);
-
-                        Serial.print(F("RFM95 info: "));
-                        print_rfm95_info();
-
-                        log_data(FILE_NAME, (char *)&rf95_buf);
-                        break;
-
-                    default:
-                        Serial.println(F("Got unrecognized message."));
-                }
-            }
-        }
-#endif
         status_off();
     }
 }
