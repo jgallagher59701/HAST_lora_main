@@ -339,6 +339,36 @@ void send_time_as_reply(uint8_t from)
     rf95_manager.resetRetransmissions();
 }
 
+#define MSG_LEN 128
+
+/**
+ * @brief Send the response to a time request
+ * @note Resets the rf95 manager's retransmissions counter
+ * @param to The node number
+ */
+void send_time_response(uint8_t to)
+{
+    yield_spi_to_rf95();
+
+    time_response_t tr;
+    build_time_response(&tr, MAIN_NODE_ADDRESS, DS3231.now().unixtime());
+
+    unsigned long start = millis();
+    if (rf95_manager.sendtoWait((uint8_t *)&tr, sizeof(time_response_t), to)) {
+        char msg[MSG_LEN];
+        snprintf(msg, MSG_LEN, "...sent a reply, %ld retransmissions, %ld ms", rf95_manager.retransmissions(), millis() - start);
+        Serial.println(msg);
+        Serial.flush();
+    } else {
+        char msg[MSG_LEN];
+        snprintf(msg, MSG_LEN, "...reply failed, %ld retransmissions, %ld ms", rf95_manager.retransmissions(), millis() - start);
+        Serial.println(msg);
+        Serial.flush();
+    }
+
+    rf95_manager.resetRetransmissions();
+}
+
 uint8_t rf95_buf[RH_RF95_MAX_MESSAGE_LEN];
 
 void loop() {
@@ -402,16 +432,10 @@ void loop() {
                     print_rfm95_info();
 
                     // log reading to the SD card, not pretty-printed
-                    const char *pretty_buf = data_message_to_string((data_message_t *)rf95_buf, false);
-                    log_data(FILE_NAME, pretty_buf);
+                    const char *buf = data_message_to_string((data_message_t *)rf95_buf, false);
+                    log_data(FILE_NAME, buf);
                     break;
                 }
-
-                case join_request:
-                    break;
-
-                case time_request:
-                    break;
 
                 case text: {
                     Serial.print(F("Got: "));
@@ -426,6 +450,26 @@ void loop() {
                     break;
                 }
  
+                case join_request:
+                    // extract the EUI. Record it and assign a byte node number.
+                    break;
+
+                case time_request: {
+                    Serial.print(F("Time request: "));
+                    Serial.print(time_request_to_string((time_request_t *)rf95_buf, /* pretty */ true));
+
+                    Serial.print(F(", "));
+                    print_rfm95_info();
+
+                    
+
+                    // log reading to the SD card, not pretty-printed
+                    const char *buf = time_request_to_string((time_request_t *)rf95_buf, false);
+                    log_data(FILE_NAME, buf);
+                    break;
+                }
+
+
                 default:
                     Serial.println(F("Got unrecognized message."));
             }
