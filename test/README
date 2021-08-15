@@ -1,0 +1,41 @@
+
+Set up opertation of the unit tests involves some less than obvious
+things.
+
+The unit tests that do not build and download code to a MCU are tests
+that run in the 'native' environment. I only have 'native' tests now.
+To build code in this env, the 'native' env must be installed:
+
+    pio platform install native
+
+The tests are written liks just about any set of unit tests. Look in
+this directory.
+
+However, for tests to work with a local library (one in the 'lib'
+directory), that library needs a 'library.json' file. Look at the code
+in lib/soil_sensor_common to see how that library is organized and how
+the library.json file describes the lib. The regular compile commands
+don't (seem to) need this library.json file, but the tests do.
+
+To run the tests:
+
+    pio test -e native [-v]
+
+Note that to build the code you use 'pio run,' so the tests build &
+run with a different command and that might explain why on needs the
+library.json file and the other doesn't...
+
+To clean the library code:
+
+    pio run -t clean -e native
+
+Options long versions:
+
+-t is --target
+-e is --environment
+-v is --verbose
+
+To get the version info about platformio:
+
+    pio --version
+
