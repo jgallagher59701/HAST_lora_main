@@ -212,18 +212,25 @@ void print_rfm95_info() {
     Serial.println(rf95.rxBad(), DEC);
 }
 
+#define SERIAL_WAIT_TIME 10000      // 10s
+#define ONE_SECOND 1000             // ms
+
 void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(RFM95_RST, OUTPUT);
     pinMode(RFM95_CS, OUTPUT);
     pinMode(SD_CS, OUTPUT);
 
-    // digitalWrite(RFM95_CS, HIGH);
-
+    long start_time = millis();
     Serial.begin(BAUD_RATE);
-    while (!Serial) {
-        // wait for the Serial interface to come up
+    // wait for the Serial interface to come up or for the SERIAL_WAIT_TIME
+    while (!Serial && (millis() - start_time < SERIAL_WAIT_TIME)) {
+        status_on();
+        delay(ONE_SECOND);
+        status_off();
+        delay(ONE_SECOND);
     }
+
     Serial.println(F("boot"));
 
     int sda = I2C_SDA;
