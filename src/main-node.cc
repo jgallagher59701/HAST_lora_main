@@ -17,6 +17,10 @@
 #include <RTClib.h>
 #include <Wire.h>
 
+#include <Adafruit_GFX.h>    // Core graphics library
+#include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
+#include <Adafruit_ST7789.h> // Hardware-specific library for ST7789
+
 #include "data_packet.h"
 #include "messages.h"
 
@@ -84,6 +88,16 @@ SdFile file; // Log file.
 #define FILE_NAME "Sensor_data.csv"
 
 bool sd_card_status = false; // true == SD card init'd
+
+// Hack in the TFT display
+extern Adafruit_ST7735 tft;
+void tft_setup();
+//void tft_display_data_packet(const packet_t *data);
+
+#define DATA_LINE_CHARS 161
+void tft_display_data_packet(const char text[DATA_LINE_CHARS]);
+void tft_get_data_line(const packet_t *data, char text[DATA_LINE_CHARS]);
+
 
 #define REPLY 1
 
@@ -215,11 +229,16 @@ void print_rfm95_info() {
 #define SERIAL_WAIT_TIME 10000      // 10s
 #define ONE_SECOND 1000             // ms
 
+#if 0
+#define TFT_CS         6
+#define TFT_RST        9 // Or set to -1 and connect to Arduino RESET pin
+#define TFT_DC         5
+#endif
+
 void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(RFM95_RST, OUTPUT);
     pinMode(RFM95_CS, OUTPUT);
-    pinMode(SD_CS, OUTPUT);
 
     long start_time = millis();
     Serial.begin(BAUD_RATE);
@@ -236,6 +255,8 @@ void setup() {
     int sda = I2C_SDA;
     int scl = I2C_SCL;
     Wire.begin(sda, scl);
+
+    tft_setup();
 
     // Initialize the SD card
     yield_spi_to_sd();
@@ -427,6 +448,15 @@ void loop() {
 #if REPLY
                     send_time_as_reply(from);
 #endif
+                    // TFT display values
+                    // node time *C %rh status rssi
+                    // parse_data_packet(const packet_t *data, uint8_t *node, uint32_t *message, uint32_t *time, uint16_t *battery,
+                    //                   uint16_t *last_tx_duration, int16_t *temp, uint16_t *humidity, uint8_t *status);
+
+                    char text[DATA_LINE_CHARS];
+                    tft_get_data_line((packet_t *)rf95_buf, text);
+                    tft_display_data_packet(text);
+
                     break;
                 }
 
