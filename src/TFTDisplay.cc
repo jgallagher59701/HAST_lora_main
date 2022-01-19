@@ -64,11 +64,6 @@ Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 // For ST7735-based displays, we will use this call
 //Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
 
-// TFT display values
-// node time *C %rh status rssi
-// parse_data_packet(const packet_t *data, uint8_t *node, uint32_t *message, uint32_t *time, uint16_t *battery,
-//                   uint16_t *last_tx_duration, int16_t *temp, uint16_t *humidity, uint8_t *status);
-
 void tft_display_header() 
 {
     tft.fillScreen(ST77XX_BLACK);
@@ -76,7 +71,7 @@ void tft_display_header()
     tft.setCursor(2, 3);
     tft.setTextColor(ST77XX_RED);
     tft.setTextSize(1); 
-    tft.println("Node time  C  %rh stat");
+    tft.println("Node time  C  %rh bat stat");
 
     tft.drawFastHLine(2, 13, tft.width()-4, ST77XX_RED);
 }
@@ -91,7 +86,7 @@ void tft_get_data_line(const packet_t *data, char text[DATA_LINE_CHARS])
     uint8_t node;
     uint32_t message; // not used
     uint32_t time;  // not used
-    uint16_t battery; // not used
+    uint16_t battery;
     uint16_t last_tx_duration; // not used
     int16_t temp;
     uint16_t humidity;
@@ -103,54 +98,49 @@ void tft_get_data_line(const packet_t *data, char text[DATA_LINE_CHARS])
     unsigned int sec = DS3231.now().second();
 
     // write the current line
-    snprintf((char *)text, DATA_LINE_CHARS, "%u %02u:%02u %03f %u 0x%02x",
-                 node, min, sec, temp/100.0, humidity/100, (unsigned int)status);
+    snprintf((char *)text, DATA_LINE_CHARS, "%u %02u:%02u %3.1f %u %3.2f 0x%02x",
+                 node, min, sec, temp/100.0, humidity/100, battery/100.0, (unsigned int)status);
 
 }
 
 #define LANDSCAPE_1 1        // landscape with upper left near pins
 #define MAX_LINE 11          // 11 lines can be displayed
 
+// Global storage holds the line text and currnet line.
+char tft_line_text[MAX_LINE][DATA_LINE_CHARS] = {};
+unsigned int tft_current_line = 0;
+
+/**
+ * @brief Display information in the packet to the TFT.
+ */
 void tft_display_data_packet(const char text[DATA_LINE_CHARS])
 {
-    static unsigned int current_line = 0;
-
- 
-    // tft.setRotation(LANDSCAPE_1);
-    // tft.setTextWrap(false);
-    
-    //tft.setCursor(2, 13);
-    
-    //tft.setTextSize(1);
-
-     char decoded_string[MAX_LINE][DATA_LINE_CHARS];
-
-    // scroll lines up
-    if (current_line == MAX_LINE-1) {
-        for (unsigned int line = 0; line < current_line; ++line) {
-            memcpy(decoded_string + (line * DATA_LINE_CHARS), decoded_string + ((line+1) * DATA_LINE_CHARS), DATA_LINE_CHARS);
-        }
-    }
-
-    memcpy(decoded_string + (current_line * DATA_LINE_CHARS), text, DATA_LINE_CHARS); 
+    memcpy(tft_line_text[tft_current_line], text, DATA_LINE_CHARS); 
 
     // display header and all the lines
     tft_display_header();
 
+    // Change color and (re)write the lines
     tft.setTextColor(ST77XX_GREEN);
-    //tft.setCursor(2, 15);
-
-    for (unsigned int line = 0; line < current_line+1; ++line) {
+ 
+    for (unsigned int line = 0; line <= tft_current_line; ++line) {
         tft.setCursor(2, 15 + (10 * line));
-        tft.println(decoded_string[line]);
+        tft.println(tft_line_text[line]);
     }
     
-    if (current_line < MAX_LINE-1) ++current_line;
-
-    // tft.println(decoded_string);
+    if (tft_current_line < MAX_LINE-1) {
+        // once the screen is full, only add a line at the bottom
+        ++tft_current_line;
+    }
+    else {
+        // scroll lines up if we need to make space for the next line
+        for (unsigned int line = 0; line < MAX_LINE-1; ++line) {
+            memcpy(tft_line_text[line], tft_line_text[line+1], DATA_LINE_CHARS);
+        }
+    }
 }
 
-
+#if 0
 float pi = 3.1415926;
 
 void testlines(uint16_t color) {
@@ -341,12 +331,14 @@ void mediabuttons() {
   // play color
   tft.fillTriangle(42, 20, 42, 60, 90, 40, ST77XX_GREEN);
 }
+#endif
 
 void tft_setup() {
 #if 0
   Serial.begin(9600);
-  Serial.print(F("Hello! ST77xx TFT Test"));
 #endif
+
+  Serial.print(F("Hello! ST77xx TFT Test..."));
 
   // Use this initializer if using a 1.8" TFT screen:
   tft.initR(INITR_BLACKTAB);      // Init ST7735S chip, black tab
@@ -359,8 +351,9 @@ void tft_setup() {
   // may end up with a black screen some times, or all the time.
   //tft.setSPISpeed(40000000);
 
-  Serial.println(F("TFT Initialized"));
+  Serial.println(F(" TFT Initialized"));
 
+#if 0
   uint16_t time = millis();
   tft.fillScreen(ST77XX_BLACK);
   time = millis() - time;
@@ -411,19 +404,25 @@ void tft_setup() {
 
   Serial.println("done");
   delay(1000);
-
+#endif
     // New setup.
 
     tft.setRotation(LANDSCAPE_1);
     tft.setTextWrap(false);
+    tft_display_header();
+
+#if 0
     tft.fillScreen(ST77XX_BLACK);
 
     char text[128];
     for (int i = 0; i < 20; ++i) {
-        snprintf(text, 128, "line %u, more stuff", i);
+        snprintf(text, 128, "line %u, more stuff...", i);
         tft_display_data_packet(text);
         delay(1000);
     }
+
+    tft_current_line = 0;
+#endif
 }
 
 #if 0
