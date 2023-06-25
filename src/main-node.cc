@@ -67,6 +67,13 @@
 // Real time clock
 RTC_DS3231 DS3231; // we are using the DS3231 RTC
 
+// Since this is a compile-time option, first set it, compile and upload the
+// code. That will set the time to something close to the real time (there is
+// some error due to the upload time). Then clear the option, rebuild and
+// upload the code _again_. That will enable restart of the main node so it
+// uses the time value saved by the DS3231 (using the battery backup).
+//
+// Set the value using the platformio.ini file. jhrg 6/25/23
 #ifndef ADJUST_TIME
 #define ADJUST_TIME 0
 #endif
