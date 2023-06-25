@@ -6,21 +6,24 @@
   Modified to use the ESP8266 'NodeMCU' board since the AT328 does not
   have enough memory for the SD card, LoRa and DS3231 clock.
   10/24/20
+
+  And modified again to use the Adafruit Feather M0 (an SAMD21 board
+  with LoRa).
+  3/25/21
 */
 
+#include <Adafruit_GFX.h>     // Core graphics library
+#include <Adafruit_ST7735.h>  // Hardware-specific library for ST7735
+#include <Adafruit_ST7789.h>  // Hardware-specific library for ST7789
 #include <Arduino.h>
-
 #include <RHReliableDatagram.h>
 #include <RH_RF95.h>
+#include <RTClib.h>
 #include <SPI.h>
 #include <SdFat.h>
-#include <RTClib.h>
 #include <Wire.h>
 
-#include <Adafruit_GFX.h>    // Core graphics library
-#include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
-#include <Adafruit_ST7789.h> // Hardware-specific library for ST7789
-
+#include "TFTDisplay.h"
 #include "data_packet.h"
 #include "messages.h"
 
@@ -64,6 +67,10 @@
 // Real time clock
 RTC_DS3231 DS3231; // we are using the DS3231 RTC
 
+#ifndef ADJUST_TIME
+#define ADJUST_TIME 0
+#endif
+
 #define MAIN_NODE_ADDRESS 0
 
 // #define FREQUENCY 915.0
@@ -75,6 +82,12 @@ RTC_DS3231 DS3231; // we are using the DS3231 RTC
 #define SPREADING_FACTOR 10
 #define CODING_RATE 5
 // RH_CAD_DEFAULT_TIMEOUT 10seconds
+
+// Should the main node send a reply to a leaf node? If so, that
+// reply will be a time code and the leaf node may reset its internal
+// clock to that time. If this time is in the past relative to the
+// leaf node's boot time value, it may never wake up.
+#define REPLY 1
 
 // Singleton instance of the radio driver
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
@@ -88,18 +101,6 @@ SdFile file; // Log file.
 #define FILE_NAME "Sensor_data.csv"
 
 bool sd_card_status = false; // true == SD card init'd
-
-// Hack in the TFT display
-extern Adafruit_ST7735 tft;
-void tft_setup();
-//void tft_display_data_packet(const packet_t *data);
-
-#define DATA_LINE_CHARS 161
-void tft_display_data_packet(const char text[DATA_LINE_CHARS]);
-void tft_get_data_line(const packet_t *data, char text[DATA_LINE_CHARS]);
-
-
-#define REPLY 1
 
 // Given a DateTime instance, return a pointer to static string that holds
 // an ISO 8601 print representation of the object.
@@ -229,12 +230,6 @@ void print_rfm95_info() {
 #define SERIAL_WAIT_TIME 10000      // 10s
 #define ONE_SECOND 1000             // ms
 
-#if 0
-#define TFT_CS         6
-#define TFT_RST        9 // Or set to -1 and connect to Arduino RESET pin
-#define TFT_DC         5
-#endif
-
 void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(RFM95_RST, OUTPUT);
@@ -317,12 +312,13 @@ void setup() {
 
     if (!DS3231.begin()) {
         Serial.println("Couldn't find DS3231");
-        //Serial.flush();
-        // abort();
     }
 
-    if (DS3231.lostPower()) {
-        Serial.println("RTC lost power, let's set the time!");
+    if (DS3231.lostPower() || ADJUST_TIME) {
+        if (ADJUST_TIME)
+            Serial.println("ADJUST_TIME option set, set time to compiled value");
+        else
+            Serial.println("RTC lost power, let's set the time!");
         // When time needs to be set on a new device, or after a power loss, the
         // following line sets the RTC to the date & time this sketch was compiled
         DS3231.adjust(DateTime(F(__DATE__), F(__TIME__)));
@@ -454,7 +450,7 @@ void loop() {
                     //                   uint16_t *last_tx_duration, int16_t *temp, uint16_t *humidity, uint8_t *status);
 
                     char text[DATA_LINE_CHARS];
-                    tft_get_data_line((packet_t *)rf95_buf, text);
+                    tft_get_data_line((packet_t *)rf95_buf, DS3231.now().minute(), DS3231.now().second(), text);
                     tft_display_data_packet(text);
 
                     break;

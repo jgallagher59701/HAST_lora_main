@@ -48,7 +48,6 @@ void test_join_request_to_string() {
     TEST_ASSERT_TRUE(strlen(str2) < strlen(str3));
 }
 
-
 int main( int argc, char **argv) {
     UNITY_BEGIN();
 

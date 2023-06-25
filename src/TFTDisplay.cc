@@ -46,7 +46,6 @@
 #include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
 
 #include <SPI.h>
-#include <RTClib.h>          // Access time info from the main node.
 
 #include "data_packet.h"     // Decode information in a data packet
 
@@ -55,8 +54,6 @@
 #define TFT_CS         6
 #define TFT_RST        9 // Or set to -1 and connect to Arduino RESET pin
 #define TFT_DC         5
-
-extern RTC_DS3231 DS3231;    // see main-node.cc
 
 // OPTION 1 (recommended) is to use the HARDWARE SPI pins, which are unique
 // to each board and not reassignable. For Arduino Uno: MOSI = pin 11 and
@@ -77,7 +74,7 @@ Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 /**
  * @brief Write the leaf node data header.
  * 
- * This refreshess the display and names the columns of data. Once this is
+ * This refreshes the display and names the columns of data. Once this is
  * called, all the lines will need to be redrawn. Start the header indented
  * 2 pixels and with 3 blank rows of pixels at the top.
  */
@@ -98,7 +95,7 @@ void tft_display_header()
 /**
  * @brief Write decoded packet values to display to 'text'
  */
-void tft_get_data_line(const packet_t *data, char text[DATA_LINE_CHARS])
+void tft_get_data_line(const packet_t *data, unsigned int min, unsigned int sec, char text[DATA_LINE_CHARS])
 {
     uint8_t node;
     uint32_t message; // not used
@@ -111,8 +108,10 @@ void tft_get_data_line(const packet_t *data, char text[DATA_LINE_CHARS])
 
     parse_data_packet(data, &node, &message, &time, &battery, &last_tx_duration, &temp, &humidity, &status);
 
+#if 0
     unsigned int min = DS3231.now().minute();
     unsigned int sec = DS3231.now().second();
+#endif
 
     // write the current line of text to the array 'text'
     snprintf((char *)text, DATA_LINE_CHARS, "%u %02u:%02u %3.1f %u %3.2f 0x%02x",
@@ -122,7 +121,7 @@ void tft_get_data_line(const packet_t *data, char text[DATA_LINE_CHARS])
 
 #define MAX_LINE 11          // 11 lines can be displayed
 
-// Global storage holds the line text and currnet line.
+// Global storage holds the line text and current line.
 char tft_line_text[MAX_LINE][DATA_LINE_CHARS] = {};
 unsigned int tft_current_line = 0;
 
