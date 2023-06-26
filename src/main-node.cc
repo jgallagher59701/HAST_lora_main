@@ -448,13 +448,10 @@ void loop() {
                     // log reading to the SD card
                     const char *pretty_buf = data_packet_to_string((packet_t *)rf95_buf, false);
                     log_data(FILE_NAME, pretty_buf);
+
 #if REPLY
                     send_time_as_reply(from);
 #endif
-                    // TFT display values
-                    // node time *C %rh status rssi
-                    // parse_data_packet(const packet_t *data, uint8_t *node, uint32_t *message, uint32_t *time, uint16_t *battery,
-                    //                   uint16_t *last_tx_duration, int16_t *temp, uint16_t *humidity, uint8_t *status);
 
                     char text[DATA_LINE_CHARS];
                     tft_get_data_line((packet_t *)rf95_buf, DS3231.now().minute(), DS3231.now().second(), text);
@@ -463,6 +460,8 @@ void loop() {
                     break;
                 }
 
+                // This case depends on changes in soil_sensor_common on the message_changes branch
+                // jhrg 6/25/23
                 case data_message: {            // New data message with type indicator
                     // Print received packet
                     Serial.print(F("Data: "));

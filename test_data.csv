@@ -1,0 +1,735 @@
+1642435282.798999,boot
+1642435282.952136,Initializing SD card... OK
+1642435283.1210601,Starting receiver... OK
+1642435283.1227908,Listening on frequency: 902.30
+1642435283.12435,Startup time: 2022-01-17T10:01:33
+1642435314.3012218,
+1642435314.30225,Current time: 2022-01-17T10:02:05
+1642435314.303433,"Received length: 20, from: 0x0a, to: 0xff, id: 0x01, header: 0x00"
+1642435314.305165,"Data: node: 10, message: 1, time: 1642362203, Vbat 447 v, Tx dur 0 ms, T: 1743 C, RH: 2450 %, status: 0x20, RSSI -55 dBm, SNR 11 dB, good/bad packets: 1/0"
+1642435314.85495,"...sent a reply, 0 retransmissions, 539 ms"
+1642435317.375415,
+1642435317.3765419,Current time: 2022-01-17T10:02:08
+1642435317.3777258,"Received length: 20, from: 0x0a, to: 0xff, id: 0x02, header: 0x00"
+1642435317.379662,"Data: node: 10, message: 2, time: 1642413728, Vbat 359 v, Tx dur 386 ms, T: 1742 C, RH: 2454 %, status: 0x20, RSSI -56 dBm, SNR 10 dB, good/bad packets: 3/0"
+1642435317.929121,"...sent a reply, 0 retransmissions, 539 ms"
+1642435377.372718,
+1642435377.373896,Current time: 2022-01-17T10:03:08
+1642435377.37485,"Received length: 20, from: 0x0a, to: 0xff, id: 0x03, header: 0x00"
+1642435377.376544,"Data: node: 10, message: 3, time: 1642413788, Vbat 359 v, Tx dur 386 ms, T: 1745 C, RH: 2420 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 5/0"
+1642435377.9265752,"...sent a reply, 0 retransmissions, 539 ms"
+1642435437.370145,
+1642435437.371119,Current time: 2022-01-17T10:04:08
+1642435437.3722749,"Received length: 20, from: 0x0a, to: 0xff, id: 0x04, header: 0x00"
+1642435437.373962,"Data: node: 10, message: 4, time: 1642413848, Vbat 358 v, Tx dur 386 ms, T: 1749 C, RH: 2432 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 7/0"
+1642435437.923807,"...sent a reply, 0 retransmissions, 539 ms"
+1642435497.367243,
+1642435497.368321,Current time: 2022-01-17T10:05:08
+1642435497.369463,"Received length: 20, from: 0x0a, to: 0xff, id: 0x05, header: 0x00"
+1642435497.371878,"Data: node: 10, message: 5, time: 1642413908, Vbat 358 v, Tx dur 386 ms, T: 1748 C, RH: 2422 %, status: 0x20, RSSI -54 dBm, SNR 13 dB, good/bad packets: 9/0"
+1642435497.9211452,"...sent a reply, 0 retransmissions, 540 ms"
+1642435557.364594,
+1642435557.365682,Current time: 2022-01-17T10:06:08
+1642435557.3668292,"Received length: 20, from: 0x0a, to: 0xff, id: 0x06, header: 0x00"
+1642435557.368809,"Data: node: 10, message: 6, time: 1642413968, Vbat 358 v, Tx dur 386 ms, T: 1749 C, RH: 2424 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 11/0"
+1642435557.9179,"...sent a reply, 0 retransmissions, 539 ms"
+1642435617.3618429,
+1642435617.3629482,Current time: 2022-01-17T10:07:08
+1642435617.364125,"Received length: 20, from: 0x0a, to: 0xff, id: 0x07, header: 0x00"
+1642435617.366554,"Data: node: 10, message: 7, time: 1642414028, Vbat 359 v, Tx dur 386 ms, T: 1751 C, RH: 2406 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 13/0"
+1642435617.915645,"...sent a reply, 0 retransmissions, 539 ms"
+1642435677.359094,
+1642435677.3601558,Current time: 2022-01-17T10:08:08
+1642435677.361279,"Received length: 20, from: 0x0a, to: 0xff, id: 0x08, header: 0x00"
+1642435677.363442,"Data: node: 10, message: 8, time: 1642414088, Vbat 359 v, Tx dur 386 ms, T: 1752 C, RH: 2400 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 15/0"
+1642435677.912889,"...sent a reply, 0 retransmissions, 539 ms"
+1642435737.35637,
+1642435737.357452,Current time: 2022-01-17T10:09:08
+1642435737.358592,"Received length: 20, from: 0x0a, to: 0xff, id: 0x09, header: 0x00"
+1642435737.3608909,"Data: node: 10, message: 9, time: 1642414148, Vbat 359 v, Tx dur 386 ms, T: 1752 C, RH: 2392 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 17/0"
+1642435737.910191,"...sent a reply, 0 retransmissions, 540 ms"
+1642435797.353606,
+1642435797.354683,Current time: 2022-01-17T10:10:08
+1642435797.355801,"Received length: 20, from: 0x0a, to: 0xff, id: 0x0a, header: 0x00"
+1642435797.3580658,"Data: node: 10, message: 10, time: 1642414208, Vbat 359 v, Tx dur 386 ms, T: 1752 C, RH: 2387 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 19/0"
+1642435797.907418,"...sent a reply, 0 retransmissions, 539 ms"
+1642435857.3509,
+1642435857.351956,Current time: 2022-01-17T10:11:08
+1642435857.353195,"Received length: 20, from: 0x0a, to: 0xff, id: 0x0b, header: 0x00"
+1642435857.355552,"Data: node: 10, message: 11, time: 1642414268, Vbat 358 v, Tx dur 387 ms, T: 1749 C, RH: 2380 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 21/0"
+1642435857.907362,"...sent a reply, 0 retransmissions, 539 ms"
+1642435917.348295,
+1642435917.350035,Current time: 2022-01-17T10:12:08
+1642435917.351138,"Received length: 20, from: 0x0a, to: 0xff, id: 0x0c, header: 0x00"
+1642435917.3530712,"Data: node: 10, message: 12, time: 1642414328, Vbat 359 v, Tx dur 386 ms, T: 1751 C, RH: 2373 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 23/0"
+1642435917.901887,"...sent a reply, 0 retransmissions, 540 ms"
+1642435977.3454442,
+1642435977.3476312,Current time: 2022-01-17T10:13:08
+1642435977.34874,"Received length: 20, from: 0x0a, to: 0xff, id: 0x0d, header: 0x00"
+1642435977.3504739,"Data: node: 10, message: 13, time: 1642414388, Vbat 359 v, Tx dur 386 ms, T: 1752 C, RH: 2363 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 25/0"
+1642435977.899145,"...sent a reply, 0 retransmissions, 539 ms"
+1642436037.342633,
+1642436037.3446982,Current time: 2022-01-17T10:14:08
+1642436037.345925,"Received length: 20, from: 0x0a, to: 0xff, id: 0x0e, header: 0x00"
+1642436037.3476381,"Data: node: 10, message: 14, time: 1642414448, Vbat 359 v, Tx dur 386 ms, T: 1752 C, RH: 2362 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 27/0"
+1642436037.8965602,"...sent a reply, 0 retransmissions, 539 ms"
+1642436097.3109791,
+1642436097.312714,Current time: 2022-01-17T10:15:08
+1642436097.313555,"Received length: 20, from: 0x0a, to: 0xff, id: 0x0f, header: 0x00"
+1642436097.315271,"Data: node: 10, message: 15, time: 1642414508, Vbat 358 v, Tx dur 386 ms, T: 1752 C, RH: 2360 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 29/0"
+1642436097.864701,"...sent a reply, 0 retransmissions, 539 ms"
+1642436157.30737,
+1642436157.308455,Current time: 2022-01-17T10:16:08
+1642436157.309628,"Received length: 20, from: 0x0a, to: 0xff, id: 0x10, header: 0x00"
+1642436157.311318,"Data: node: 10, message: 16, time: 1642414568, Vbat 359 v, Tx dur 386 ms, T: 1753 C, RH: 2360 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 31/0"
+1642436157.861145,"...sent a reply, 0 retransmissions, 539 ms"
+1642436217.304229,
+1642436217.305898,Current time: 2022-01-17T10:17:08
+1642436217.306698,"Received length: 20, from: 0x0a, to: 0xff, id: 0x11, header: 0x00"
+1642436217.3083599,"Data: node: 10, message: 17, time: 1642414628, Vbat 359 v, Tx dur 386 ms, T: 1753 C, RH: 2363 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 33/0"
+1642436217.858022,"...sent a reply, 0 retransmissions, 539 ms"
+1642436277.30114,
+1642436277.302201,Current time: 2022-01-17T10:18:08
+1642436277.303282,"Received length: 20, from: 0x0a, to: 0xff, id: 0x12, header: 0x00"
+1642436277.305089,"Data: node: 10, message: 18, time: 1642414688, Vbat 359 v, Tx dur 387 ms, T: 1756 C, RH: 2365 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 35/0"
+1642436277.8549829,"...sent a reply, 0 retransmissions, 540 ms"
+1642436337.298065,
+1642436337.2991831,Current time: 2022-01-17T10:19:08
+1642436337.300162,"Received length: 20, from: 0x0a, to: 0xff, id: 0x13, header: 0x00"
+1642436337.301836,"Data: node: 10, message: 19, time: 1642414748, Vbat 359 v, Tx dur 386 ms, T: 1761 C, RH: 2362 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 37/0"
+1642436337.85166,"...sent a reply, 0 retransmissions, 539 ms"
+1642436397.29504,
+1642436397.2970219,Current time: 2022-01-17T10:20:08
+1642436397.297894,"Received length: 20, from: 0x0a, to: 0xff, id: 0x14, header: 0x00"
+1642436397.299521,"Data: node: 10, message: 20, time: 1642414808, Vbat 359 v, Tx dur 387 ms, T: 1762 C, RH: 2354 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 39/0"
+1642436397.84882,"...sent a reply, 0 retransmissions, 539 ms"
+1642436457.291956,
+1642436457.2937899,Current time: 2022-01-17T10:21:08
+1642436457.294632,"Received length: 20, from: 0x0a, to: 0xff, id: 0x15, header: 0x00"
+1642436457.296361,"Data: node: 10, message: 21, time: 1642414868, Vbat 359 v, Tx dur 386 ms, T: 1765 C, RH: 2339 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 41/0"
+1642436457.8457742,"...sent a reply, 0 retransmissions, 539 ms"
+1642436517.2889001,
+1642436517.289953,Current time: 2022-01-17T10:22:08
+1642436517.291095,"Received length: 20, from: 0x0a, to: 0xff, id: 0x16, header: 0x00"
+1642436517.2930539,"Data: node: 10, message: 22, time: 1642414928, Vbat 358 v, Tx dur 386 ms, T: 1765 C, RH: 2339 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 43/0"
+1642436517.845303,"...sent a reply, 0 retransmissions, 539 ms"
+1642436577.285859,
+1642436577.2870731,Current time: 2022-01-17T10:23:08
+1642436577.288339,"Received length: 20, from: 0x0a, to: 0xff, id: 0x17, header: 0x00"
+1642436577.2901409,"Data: node: 10, message: 23, time: 1642414988, Vbat 359 v, Tx dur 386 ms, T: 1766 C, RH: 2331 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 45/0"
+1642436577.839573,"...sent a reply, 0 retransmissions, 539 ms"
+1642436697.279619,
+1642436697.281582,Current time: 2022-01-17T10:25:08
+1642436697.2827551,"Received length: 20, from: 0x0a, to: 0xff, id: 0x19, header: 0x00"
+1642436697.2844532,"Data: node: 10, message: 25, time: 1642415108, Vbat 359 v, Tx dur 387 ms, T: 1768 C, RH: 2324 %, status: 0x22, RSSI -55 dBm, SNR 12 dB, good/bad packets: 47/1"
+1642436697.8333938,"...sent a reply, 0 retransmissions, 539 ms"
+1642436757.276562,
+1642436757.277676,Current time: 2022-01-17T10:26:08
+1642436757.278954,"Received length: 20, from: 0x0a, to: 0xff, id: 0x1a, header: 0x00"
+1642436757.281323,"Data: node: 10, message: 26, time: 1642415168, Vbat 359 v, Tx dur 386 ms, T: 1768 C, RH: 2316 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 49/1"
+1642436757.8302531,"...sent a reply, 0 retransmissions, 539 ms"
+1642436817.273468,
+1642436817.2745442,Current time: 2022-01-17T10:27:08
+1642436817.275607,"Received length: 20, from: 0x0a, to: 0xff, id: 0x1b, header: 0x00"
+1642436817.277397,"Data: node: 10, message: 27, time: 1642415228, Vbat 358 v, Tx dur 387 ms, T: 1769 C, RH: 2314 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 51/1"
+1642436817.827231,"...sent a reply, 0 retransmissions, 539 ms"
+1642436877.270414,
+1642436877.271439,Current time: 2022-01-17T10:28:08
+1642436877.272424,"Received length: 20, from: 0x0a, to: 0xff, id: 0x1c, header: 0x00"
+1642436877.2741299,"Data: node: 10, message: 28, time: 1642415288, Vbat 359 v, Tx dur 386 ms, T: 1770 C, RH: 2314 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 53/1"
+1642436877.8241658,"...sent a reply, 0 retransmissions, 539 ms"
+1642436937.2673101,
+1642436937.269304,Current time: 2022-01-17T10:29:08
+1642436937.27046,"Received length: 20, from: 0x0a, to: 0xff, id: 0x1d, header: 0x00"
+1642436937.272179,"Data: node: 10, message: 29, time: 1642415348, Vbat 358 v, Tx dur 387 ms, T: 1773 C, RH: 2282 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 55/1"
+1642436937.821098,"...sent a reply, 0 retransmissions, 540 ms"
+1642436997.304425,
+1642436997.3054569,Current time: 2022-01-17T10:30:08
+1642436997.306682,"Received length: 20, from: 0x0a, to: 0xff, id: 0x1e, header: 0x00"
+1642436997.309,"Data: node: 10, message: 30, time: 1642415408, Vbat 359 v, Tx dur 386 ms, T: 1776 C, RH: 2276 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 57/1"
+1642436997.8582048,"...sent a reply, 0 retransmissions, 539 ms"
+1642437057.302725,
+1642437057.303873,Current time: 2022-01-17T10:31:08
+1642437057.305046,"Received length: 20, from: 0x0a, to: 0xff, id: 0x1f, header: 0x00"
+1642437057.307339,"Data: node: 10, message: 31, time: 1642415468, Vbat 359 v, Tx dur 386 ms, T: 1778 C, RH: 2272 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 59/1"
+1642437057.856607,"...sent a reply, 0 retransmissions, 539 ms"
+1642437117.30019,
+1642437117.302272,Current time: 2022-01-17T10:32:08
+1642437117.303366,"Received length: 20, from: 0x0a, to: 0xff, id: 0x20, header: 0x00"
+1642437117.305068,"Data: node: 10, message: 32, time: 1642415528, Vbat 359 v, Tx dur 386 ms, T: 1779 C, RH: 2271 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 61/1"
+1642437117.853996,"...sent a reply, 0 retransmissions, 539 ms"
+1642437177.297536,
+1642437177.2991161,Current time: 2022-01-17T10:33:08
+1642437177.299973,"Received length: 20, from: 0x0a, to: 0xff, id: 0x21, header: 0x00"
+1642437177.3017018,"Data: node: 10, message: 33, time: 1642415588, Vbat 359 v, Tx dur 386 ms, T: 1783 C, RH: 2266 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 63/1"
+1642437177.8513339,"...sent a reply, 0 retransmissions, 539 ms"
+1642437237.294901,
+1642437237.297079,Current time: 2022-01-17T10:34:08
+1642437237.298219,"Received length: 20, from: 0x0a, to: 0xff, id: 0x22, header: 0x00"
+1642437237.3000069,"Data: node: 10, message: 34, time: 1642415648, Vbat 359 v, Tx dur 387 ms, T: 1786 C, RH: 2274 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 65/1"
+1642437237.851119,"...sent a reply, 0 retransmissions, 539 ms"
+1642437297.2924402,
+1642437297.293403,Current time: 2022-01-17T10:35:08
+1642437297.294559,"Received length: 20, from: 0x0a, to: 0xff, id: 0x23, header: 0x00"
+1642437297.296322,"Data: node: 10, message: 35, time: 1642415708, Vbat 359 v, Tx dur 386 ms, T: 1789 C, RH: 2259 %, status: 0x20, RSSI -55 dBm, SNR 13 dB, good/bad packets: 67/1"
+1642437297.84608,"...sent a reply, 0 retransmissions, 539 ms"
+1642437357.289526,
+1642437357.290606,Current time: 2022-01-17T10:36:08
+1642437357.291599,"Received length: 20, from: 0x0a, to: 0xff, id: 0x24, header: 0x00"
+1642437357.29333,"Data: node: 10, message: 36, time: 1642415768, Vbat 359 v, Tx dur 387 ms, T: 1790 C, RH: 2273 %, status: 0x20, RSSI -54 dBm, SNR 13 dB, good/bad packets: 69/1"
+1642437357.8435378,"...sent a reply, 0 retransmissions, 539 ms"
+1642437417.286974,
+1642437417.2880929,Current time: 2022-01-17T10:37:08
+1642437417.289313,"Received length: 20, from: 0x0a, to: 0xff, id: 0x25, header: 0x00"
+1642437417.291106,"Data: node: 10, message: 37, time: 1642415828, Vbat 358 v, Tx dur 386 ms, T: 1795 C, RH: 2266 %, status: 0x20, RSSI -54 dBm, SNR 13 dB, good/bad packets: 71/1"
+1642437417.840713,"...sent a reply, 0 retransmissions, 539 ms"
+1642437477.284349,
+1642437477.28546,Current time: 2022-01-17T10:38:08
+1642437477.2864819,"Received length: 20, from: 0x0a, to: 0xff, id: 0x26, header: 0x00"
+1642437477.288181,"Data: node: 10, message: 38, time: 1642415888, Vbat 359 v, Tx dur 387 ms, T: 1796 C, RH: 2265 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 73/1"
+1642437477.838125,"...sent a reply, 0 retransmissions, 539 ms"
+1642437537.281693,
+1642437537.282822,Current time: 2022-01-17T10:39:08
+1642437537.2841442,"Received length: 20, from: 0x0a, to: 0xff, id: 0x27, header: 0x00"
+1642437537.2860842,"Data: node: 10, message: 39, time: 1642415948, Vbat 359 v, Tx dur 386 ms, T: 1801 C, RH: 2257 %, status: 0x20, RSSI -54 dBm, SNR 13 dB, good/bad packets: 75/1"
+1642437537.835413,"...sent a reply, 0 retransmissions, 539 ms"
+1642437597.279058,
+1642437597.2801878,Current time: 2022-01-17T10:40:08
+1642437597.281507,"Received length: 20, from: 0x0a, to: 0xff, id: 0x28, header: 0x00"
+1642437597.283526,"Data: node: 10, message: 40, time: 1642416008, Vbat 359 v, Tx dur 387 ms, T: 1806 C, RH: 2248 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 77/1"
+1642437597.832735,"...sent a reply, 0 retransmissions, 539 ms"
+1642437657.2764852,
+1642437657.2775512,Current time: 2022-01-17T10:41:08
+1642437657.278733,"Received length: 20, from: 0x0a, to: 0xff, id: 0x29, header: 0x00"
+1642437657.280462,"Data: node: 10, message: 41, time: 1642416068, Vbat 359 v, Tx dur 386 ms, T: 1810 C, RH: 2243 %, status: 0x20, RSSI -55 dBm, SNR 13 dB, good/bad packets: 79/1"
+1642437657.829879,"...sent a reply, 0 retransmissions, 540 ms"
+1642437717.2738008,
+1642437717.275527,Current time: 2022-01-17T10:42:08
+1642437717.276644,"Received length: 20, from: 0x0a, to: 0xff, id: 0x2a, header: 0x00"
+1642437717.278347,"Data: node: 10, message: 42, time: 1642416128, Vbat 359 v, Tx dur 387 ms, T: 1814 C, RH: 2243 %, status: 0x20, RSSI -55 dBm, SNR 13 dB, good/bad packets: 81/1"
+1642437717.8275268,"...sent a reply, 0 retransmissions, 539 ms"
+1642437777.271156,
+1642437777.272256,Current time: 2022-01-17T10:43:08
+1642437777.273269,"Received length: 20, from: 0x0a, to: 0xff, id: 0x2b, header: 0x00"
+1642437777.274953,"Data: node: 10, message: 43, time: 1642416188, Vbat 359 v, Tx dur 386 ms, T: 1817 C, RH: 2236 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 83/1"
+1642437777.8248441,"...sent a reply, 0 retransmissions, 539 ms"
+1642437837.268556,
+1642437837.2703822,Current time: 2022-01-17T10:44:08
+1642437837.2713048,"Received length: 20, from: 0x0a, to: 0xff, id: 0x2c, header: 0x00"
+1642437837.272974,"Data: node: 10, message: 44, time: 1642416248, Vbat 358 v, Tx dur 386 ms, T: 1817 C, RH: 2237 %, status: 0x20, RSSI -54 dBm, SNR 13 dB, good/bad packets: 85/1"
+1642437837.824973,"...sent a reply, 0 retransmissions, 539 ms"
+1642437897.267329,
+1642437897.268547,Current time: 2022-01-17T10:45:08
+1642437897.269828,"Received length: 20, from: 0x0a, to: 0xff, id: 0x2d, header: 0x00"
+1642437897.271709,"Data: node: 10, message: 45, time: 1642416308, Vbat 358 v, Tx dur 386 ms, T: 1820 C, RH: 2236 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 87/1"
+1642437897.8213198,"...sent a reply, 0 retransmissions, 539 ms"
+1642437957.266388,
+1642437957.268098,Current time: 2022-01-17T10:46:08
+1642437957.268905,"Received length: 20, from: 0x0a, to: 0xff, id: 0x2e, header: 0x00"
+1642437957.2707698,"Data: node: 10, message: 46, time: 1642416368, Vbat 359 v, Tx dur 386 ms, T: 1823 C, RH: 2231 %, status: 0x20, RSSI -55 dBm, SNR 13 dB, good/bad packets: 89/1"
+1642437957.820153,"...sent a reply, 0 retransmissions, 540 ms"
+1642438017.263798,
+1642438017.264947,Current time: 2022-01-17T10:47:08
+1642438017.265994,"Received length: 20, from: 0x0a, to: 0xff, id: 0x2f, header: 0x00"
+1642438017.267647,"Data: node: 10, message: 47, time: 1642416428, Vbat 359 v, Tx dur 386 ms, T: 1824 C, RH: 2233 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 91/1"
+1642438017.817544,"...sent a reply, 0 retransmissions, 540 ms"
+1642438077.262835,
+1642438077.2643042,Current time: 2022-01-17T10:48:08
+1642438077.265053,"Received length: 20, from: 0x0a, to: 0xff, id: 0x30, header: 0x00"
+1642438077.266356,"Data: node: 10, message: 48, time: 1642416488, Vbat 359 v, Tx dur 386 ms, T: 1823 C, RH: 2234 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 93/1"
+1642438077.814958,"...sent a reply, 0 retransmissions, 539 ms"
+1642438137.258498,
+1642438137.2596,Current time: 2022-01-17T10:49:08
+1642438137.260633,"Received length: 20, from: 0x0a, to: 0xff, id: 0x31, header: 0x00"
+1642438137.2623308,"Data: node: 10, message: 49, time: 1642416548, Vbat 359 v, Tx dur 386 ms, T: 1828 C, RH: 2227 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 95/1"
+1642438137.8123252,"...sent a reply, 0 retransmissions, 539 ms"
+1642438197.255865,
+1642438197.256951,Current time: 2022-01-17T10:50:08
+1642438197.258111,"Received length: 20, from: 0x0a, to: 0xff, id: 0x32, header: 0x00"
+1642438197.259885,"Data: node: 10, message: 50, time: 1642416608, Vbat 359 v, Tx dur 386 ms, T: 1827 C, RH: 2226 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 97/1"
+1642438197.809549,"...sent a reply, 0 retransmissions, 539 ms"
+1642438257.253203,
+1642438257.254466,Current time: 2022-01-17T10:51:08
+1642438257.255647,"Received length: 20, from: 0x0a, to: 0xff, id: 0x33, header: 0x00"
+1642438257.257462,"Data: node: 10, message: 51, time: 1642416668, Vbat 359 v, Tx dur 387 ms, T: 1829 C, RH: 2226 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 99/1"
+1642438257.807022,"...sent a reply, 0 retransmissions, 540 ms"
+1642438317.250649,
+1642438317.251883,Current time: 2022-01-17T10:52:08
+1642438317.253272,"Received length: 20, from: 0x0a, to: 0xff, id: 0x34, header: 0x00"
+1642438317.25539,"Data: node: 10, message: 52, time: 1642416728, Vbat 359 v, Tx dur 386 ms, T: 1831 C, RH: 2236 %, status: 0x20, RSSI -55 dBm, SNR 13 dB, good/bad packets: 101/1"
+1642438317.804694,"...sent a reply, 0 retransmissions, 539 ms"
+1642438377.247992,
+1642438377.249057,Current time: 2022-01-17T10:53:08
+1642438377.250165,"Received length: 20, from: 0x0a, to: 0xff, id: 0x35, header: 0x00"
+1642438377.251894,"Data: node: 10, message: 53, time: 1642416788, Vbat 358 v, Tx dur 387 ms, T: 1829 C, RH: 2230 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 103/1"
+1642438377.8017988,"...sent a reply, 0 retransmissions, 539 ms"
+1642438437.245298,
+1642438437.246479,Current time: 2022-01-17T10:54:08
+1642438437.2476668,"Received length: 20, from: 0x0a, to: 0xff, id: 0x36, header: 0x00"
+1642438437.2495759,"Data: node: 10, message: 54, time: 1642416848, Vbat 359 v, Tx dur 386 ms, T: 1834 C, RH: 2267 %, status: 0x20, RSSI -54 dBm, SNR 13 dB, good/bad packets: 105/1"
+1642438437.799176,"...sent a reply, 0 retransmissions, 539 ms"
+1642438497.242778,
+1642438497.243874,Current time: 2022-01-17T10:55:08
+1642438497.245153,"Received length: 20, from: 0x0a, to: 0xff, id: 0x37, header: 0x00"
+1642438497.248082,"Data: node: 10, message: 55, time: 1642416908, Vbat 359 v, Tx dur 386 ms, T: 1837 C, RH: 2248 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 107/1"
+1642438497.79911,"...sent a reply, 0 retransmissions, 540 ms"
+1642438557.240252,
+1642438557.241405,Current time: 2022-01-17T10:56:08
+1642438557.242753,"Received length: 20, from: 0x0a, to: 0xff, id: 0x38, header: 0x00"
+1642438557.244621,"Data: node: 10, message: 56, time: 1642416968, Vbat 359 v, Tx dur 387 ms, T: 1834 C, RH: 2257 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 109/1"
+1642438557.7940018,"...sent a reply, 0 retransmissions, 539 ms"
+1642438617.237488,
+1642438617.238687,Current time: 2022-01-17T10:57:08
+1642438617.24018,"Received length: 20, from: 0x0a, to: 0xff, id: 0x39, header: 0x00"
+1642438617.2422369,"Data: node: 10, message: 57, time: 1642417028, Vbat 359 v, Tx dur 386 ms, T: 1840 C, RH: 2247 %, status: 0x20, RSSI -54 dBm, SNR 13 dB, good/bad packets: 111/1"
+1642438617.791421,"...sent a reply, 0 retransmissions, 539 ms"
+1642438677.234812,
+1642438677.235981,Current time: 2022-01-17T10:58:08
+1642438677.2371972,"Received length: 20, from: 0x0a, to: 0xff, id: 0x3a, header: 0x00"
+1642438677.239535,"Data: node: 10, message: 58, time: 1642417088, Vbat 359 v, Tx dur 387 ms, T: 1841 C, RH: 2249 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 113/1"
+1642438677.788688,"...sent a reply, 0 retransmissions, 539 ms"
+1642438737.2322712,
+1642438737.535615,Current time: 2022-01-17T10:59:08
+1642438737.536566,"Received length: 20, from: 0x0a, to: 0xff, id: 0x3b, header: 0x00"
+1642438737.56036,"Data: node: 10, message: 59, time: 1642417148, Vbat 359 v, Tx dur 386 ms, T: 1844 C, RH: 2264 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 115/1"
+1642438737.786013,"...sent a reply, 0 retransmissions, 539 ms"
+1642438797.229652,
+1642438797.2307541,Current time: 2022-01-17T11:00:08
+1642438797.231945,"Received length: 20, from: 0x0a, to: 0xff, id: 0x3c, header: 0x00"
+1642438797.234049,"Data: node: 10, message: 60, time: 1642417208, Vbat 359 v, Tx dur 386 ms, T: 1844 C, RH: 2243 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 117/1"
+1642438797.7834501,"...sent a reply, 0 retransmissions, 539 ms"
+1642438857.227005,
+1642438857.228134,Current time: 2022-01-17T11:01:08
+1642438857.229441,"Received length: 20, from: 0x0a, to: 0xff, id: 0x3d, header: 0x00"
+1642438857.231209,"Data: node: 10, message: 61, time: 1642417268, Vbat 359 v, Tx dur 387 ms, T: 1849 C, RH: 2259 %, status: 0x20, RSSI -54 dBm, SNR 13 dB, good/bad packets: 119/1"
+1642438857.7807539,"...sent a reply, 0 retransmissions, 539 ms"
+1642438917.20023,
+1642438917.2012491,Current time: 2022-01-17T11:02:08
+1642438917.202243,"Received length: 20, from: 0x0a, to: 0xff, id: 0x3e, header: 0x00"
+1642438917.2040188,"Data: node: 10, message: 62, time: 1642417328, Vbat 359 v, Tx dur 386 ms, T: 1849 C, RH: 2256 %, status: 0x20, RSSI -54 dBm, SNR 13 dB, good/bad packets: 121/1"
+1642438917.7537012,"...sent a reply, 0 retransmissions, 540 ms"
+1642438977.1908019,
+1642438977.191937,Current time: 2022-01-17T11:03:08
+1642438977.193223,"Received length: 20, from: 0x0a, to: 0xff, id: 0x3f, header: 0x00"
+1642438977.195642,"Data: node: 10, message: 63, time: 1642417388, Vbat 359 v, Tx dur 387 ms, T: 1849 C, RH: 2273 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 123/1"
+1642438977.7445388,"...sent a reply, 0 retransmissions, 539 ms"
+1642439037.187701,
+1642439037.1887648,Current time: 2022-01-17T11:04:08
+1642439037.190102,"Received length: 20, from: 0x0a, to: 0xff, id: 0x40, header: 0x00"
+1642439037.1919491,"Data: node: 10, message: 64, time: 1642417448, Vbat 358 v, Tx dur 386 ms, T: 1854 C, RH: 2264 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 125/1"
+1642439037.741436,"...sent a reply, 0 retransmissions, 539 ms"
+1642439097.184706,
+1642439097.185856,Current time: 2022-01-17T11:05:08
+1642439097.187061,"Received length: 20, from: 0x0a, to: 0xff, id: 0x41, header: 0x00"
+1642439097.189452,"Data: node: 10, message: 65, time: 1642417508, Vbat 359 v, Tx dur 386 ms, T: 1854 C, RH: 2258 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 127/1"
+1642439097.738451,"...sent a reply, 0 retransmissions, 539 ms"
+1642439157.1816351,
+1642439157.182731,Current time: 2022-01-17T11:06:08
+1642439157.183985,"Received length: 20, from: 0x0a, to: 0xff, id: 0x42, header: 0x00"
+1642439157.186052,"Data: node: 10, message: 66, time: 1642417568, Vbat 359 v, Tx dur 387 ms, T: 1859 C, RH: 2245 %, status: 0x20, RSSI -54 dBm, SNR 13 dB, good/bad packets: 129/1"
+1642439157.7377431,"...sent a reply, 0 retransmissions, 539 ms"
+1642439217.178795,
+1642439217.179777,Current time: 2022-01-17T11:07:08
+1642439217.1809769,"Received length: 20, from: 0x0a, to: 0xff, id: 0x43, header: 0x00"
+1642439217.1827352,"Data: node: 10, message: 67, time: 1642417628, Vbat 359 v, Tx dur 386 ms, T: 1862 C, RH: 2248 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 131/1"
+1642439217.732325,"...sent a reply, 0 retransmissions, 539 ms"
+1642439277.175709,
+1642439277.17682,Current time: 2022-01-17T11:08:08
+1642439277.1780548,"Received length: 20, from: 0x0a, to: 0xff, id: 0x44, header: 0x00"
+1642439277.180429,"Data: node: 10, message: 68, time: 1642417688, Vbat 358 v, Tx dur 387 ms, T: 1868 C, RH: 2241 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 133/1"
+1642439277.729301,"...sent a reply, 0 retransmissions, 540 ms"
+1642439337.172656,
+1642439337.1737778,Current time: 2022-01-17T11:09:08
+1642439337.175027,"Received length: 20, from: 0x0a, to: 0xff, id: 0x45, header: 0x00"
+1642439337.177421,"Data: node: 10, message: 69, time: 1642417748, Vbat 359 v, Tx dur 386 ms, T: 1870 C, RH: 2253 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 135/1"
+1642439337.7263181,"...sent a reply, 0 retransmissions, 539 ms"
+1642439397.169743,
+1642439397.170871,Current time: 2022-01-17T11:10:08
+1642439397.1720982,"Received length: 20, from: 0x0a, to: 0xff, id: 0x46, header: 0x00"
+1642439397.174623,"Data: node: 10, message: 70, time: 1642417808, Vbat 358 v, Tx dur 386 ms, T: 1869 C, RH: 2247 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 137/1"
+1642439397.7234461,"...sent a reply, 0 retransmissions, 539 ms"
+1642439457.166744,
+1642439457.167882,Current time: 2022-01-17T11:11:08
+1642439457.169186,"Received length: 20, from: 0x0a, to: 0xff, id: 0x47, header: 0x00"
+1642439457.1714828,"Data: node: 10, message: 71, time: 1642417868, Vbat 359 v, Tx dur 387 ms, T: 1870 C, RH: 2248 %, status: 0x20, RSSI -55 dBm, SNR 12 dB, good/bad packets: 139/1"
+1642439457.7203789,"...sent a reply, 0 retransmissions, 540 ms"
+1642439517.163777,
+1642439517.164906,Current time: 2022-01-17T11:12:08
+1642439517.1662478,"Received length: 20, from: 0x0a, to: 0xff, id: 0x48, header: 0x00"
+1642439517.1681201,"Data: node: 10, message: 72, time: 1642417928, Vbat 360 v, Tx dur 386 ms, T: 1875 C, RH: 2237 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 141/1"
+1642439517.717451,"...sent a reply, 0 retransmissions, 540 ms"
+1642439577.1607811,
+1642439577.1618712,Current time: 2022-01-17T11:13:08
+1642439577.163074,"Received length: 20, from: 0x0a, to: 0xff, id: 0x49, header: 0x00"
+1642439577.1648588,"Data: node: 10, message: 73, time: 1642417988, Vbat 359 v, Tx dur 386 ms, T: 1876 C, RH: 2239 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 143/1"
+1642439577.714478,"...sent a reply, 0 retransmissions, 539 ms"
+1642439637.157701,
+1642439637.158817,Current time: 2022-01-17T11:14:08
+1642439637.15988,"Received length: 20, from: 0x0a, to: 0xff, id: 0x4a, header: 0x00"
+1642439637.161669,"Data: node: 10, message: 74, time: 1642418048, Vbat 359 v, Tx dur 387 ms, T: 1881 C, RH: 2237 %, status: 0x20, RSSI -54 dBm, SNR 13 dB, good/bad packets: 145/1"
+1642439637.711433,"...sent a reply, 0 retransmissions, 539 ms"
+1642439697.154685,
+1642439697.155654,Current time: 2022-01-17T11:15:08
+1642439697.156451,"Received length: 20, from: 0x0a, to: 0xff, id: 0x4b, header: 0x00"
+1642439697.1577332,"Data: node: 10, message: 75, time: 1642418108, Vbat 359 v, Tx dur 387 ms, T: 1882 C, RH: 2233 %, status: 0x20, RSSI -54 dBm, SNR 13 dB, good/bad packets: 147/1"
+1642439697.709059,"...sent a reply, 0 retransmissions, 539 ms"
+1642439757.1518452,
+1642439757.152856,Current time: 2022-01-17T11:16:08
+1642439757.1540658,"Received length: 20, from: 0x0a, to: 0xff, id: 0x4c, header: 0x00"
+1642439757.15647,"Data: node: 10, message: 76, time: 1642418168, Vbat 359 v, Tx dur 386 ms, T: 1884 C, RH: 2232 %, status: 0x20, RSSI -54 dBm, SNR 12 dB, good/bad packets: 149/1"
+1642439757.707809,"...sent a reply, 0 retransmissions, 539 ms"
+1642439817.1488059,
+1642439817.14989,Current time: 2022-01-17T11:17:07
+1642439817.151113,"Received length: 20, from: 0x0a, to: 0xff, id: 0x4d, header: 0x00"
+1642439817.1534998,"Data: node: 10, message: 77, time: 1642418228, Vbat 359 v, Tx dur 386 ms, T: 1889 C, RH: 2232 %, status: 0x20, RSSI -54 dBm, SNR 13 dB, good/bad packets: 151/1"
+1642439817.702389,"...sent a reply, 0 retransmissions, 539 ms"
+1642440061.412012,boot
+1642440061.4444711,Initializing SD card... OK
+1642440061.6105778,Starting receiver... OK
+1642440061.6124318,Listening on frequency: 902.30
+1642440061.614109,Startup time: 2022-01-17T11:21:12
+1642440117.133806,
+1642440117.135193,Current time: 2022-01-17T11:22:07
+1642440117.1365912,"Received length: 20, from: 0x0a, to: 0xff, id: 0x52, header: 0x00"
+1642440117.1379268,"Data: node: 10, message: 82, time: 1642418528, Vbat 359 v, Tx dur 386 ms, T: 1906 C, RH: 2238 %, status: 0x22, RSSI -56 dBm, SNR 11 dB, good/bad packets: 1/0"
+1642440117.6867352,"...sent a reply, 0 retransmissions, 539 ms"
+1642440177.130584,
+1642440177.132226,Current time: 2022-01-17T11:23:07
+1642440177.1334,"Received length: 20, from: 0x0a, to: 0xff, id: 0x53, header: 0x00"
+1642440177.135123,"Data: node: 10, message: 83, time: 1642418588, Vbat 359 v, Tx dur 386 ms, T: 1910 C, RH: 2231 %, status: 0x20, RSSI -56 dBm, SNR 10 dB, good/bad packets: 3/0"
+1642440177.684038,"...sent a reply, 0 retransmissions, 539 ms"
+1642440237.127157,
+1642440237.128331,Current time: 2022-01-17T11:24:07
+1642440237.129803,"Received length: 20, from: 0x0a, to: 0xff, id: 0x54, header: 0x00"
+1642440237.131778,"Data: node: 10, message: 84, time: 1642418648, Vbat 359 v, Tx dur 387 ms, T: 1915 C, RH: 2224 %, status: 0x20, RSSI -56 dBm, SNR 10 dB, good/bad packets: 5/0"
+1642440237.680657,"...sent a reply, 0 retransmissions, 539 ms"
+1642440297.124108,
+1642440297.12522,Current time: 2022-01-17T11:25:07
+1642440297.1265438,"Received length: 20, from: 0x0a, to: 0xff, id: 0x55, header: 0x00"
+1642440297.1294,"Data: node: 10, message: 85, time: 1642418708, Vbat 359 v, Tx dur 386 ms, T: 1916 C, RH: 2220 %, status: 0x20, RSSI -56 dBm, SNR 11 dB, good/bad packets: 7/0"
+1642440297.677471,"...sent a reply, 0 retransmissions, 539 ms"
+1642440357.1209779,
+1642440357.122418,Current time: 2022-01-17T11:26:07
+1642440357.12367,"Received length: 20, from: 0x0a, to: 0xff, id: 0x56, header: 0x00"
+1642440357.126028,"Data: node: 10, message: 86, time: 1642418768, Vbat 359 v, Tx dur 386 ms, T: 1920 C, RH: 2220 %, status: 0x20, RSSI -56 dBm, SNR 10 dB, good/bad packets: 9/0"
+1642440357.6746671,"...sent a reply, 0 retransmissions, 539 ms"
+1642440417.11792,
+1642440417.119017,Current time: 2022-01-17T11:27:07
+1642440417.1202781,"Received length: 20, from: 0x0a, to: 0xff, id: 0x57, header: 0x00"
+1642440417.12268,"Data: node: 10, message: 87, time: 1642418828, Vbat 359 v, Tx dur 387 ms, T: 1923 C, RH: 2227 %, status: 0x20, RSSI -56 dBm, SNR 11 dB, good/bad packets: 11/0"
+1642440417.671249,"...sent a reply, 0 retransmissions, 539 ms"
+1642440477.11476,
+1642440477.1158988,Current time: 2022-01-17T11:28:07
+1642440477.117101,"Received length: 20, from: 0x0a, to: 0xff, id: 0x58, header: 0x00"
+1642440477.119596,"Data: node: 10, message: 88, time: 1642418888, Vbat 359 v, Tx dur 387 ms, T: 1926 C, RH: 2208 %, status: 0x20, RSSI -56 dBm, SNR 11 dB, good/bad packets: 13/0"
+1642440477.668475,"...sent a reply, 0 retransmissions, 538 ms"
+1642440537.111785,
+1642440537.112888,Current time: 2022-01-17T11:29:07
+1642440537.113991,"Received length: 20, from: 0x0a, to: 0xff, id: 0x59, header: 0x00"
+1642440537.11515,"Data: node: 10, message: 89, time: 1642418948, Vbat 358 v, Tx dur 386 ms, T: 1931 C, RH: 2207 %, status: 0x20, RSSI -56 dBm, SNR 10 dB, good/bad packets: 15/0"
+1642440537.66782,"...sent a reply, 0 retransmissions, 539 ms"
+1642440597.108504,
+1642440597.10944,Current time: 2022-01-17T11:30:07
+1642440597.110019,"Received length: 20, from: 0x0a, to: 0xff, id: 0x5a, header: 0x00"
+1642440597.111916,"Data: node: 10, message: 90, time: 1642419008, Vbat 358 v, Tx dur 386 ms, T: 1936 C, RH: 2219 %, status: 0x20, RSSI -56 dBm, SNR 10 dB, good/bad packets: 17/0"
+1642440597.662068,"...sent a reply, 0 retransmissions, 539 ms"
+1642440657.105272,
+1642440657.106272,Current time: 2022-01-17T11:31:07
+1642440657.106913,"Received length: 20, from: 0x0a, to: 0xff, id: 0x5b, header: 0x00"
+1642440657.108093,"Data: node: 10, message: 91, time: 1642419068, Vbat 359 v, Tx dur 387 ms, T: 1937 C, RH: 2219 %, status: 0x20, RSSI -57 dBm, SNR 10 dB, good/bad packets: 19/0"
+1642440657.659368,"...sent a reply, 0 retransmissions, 539 ms"
+1642440717.102151,
+1642440717.104073,Current time: 2022-01-17T11:32:07
+1642440717.104898,"Received length: 20, from: 0x0a, to: 0xff, id: 0x5c, header: 0x00"
+1642440717.108314,"Data: node: 10, message: 92, time: 1642419128, Vbat 359 v, Tx dur 387 ms, T: 1940 C, RH: 2216 %, status: 0x20, RSSI -57 dBm, SNR 10 dB, good/bad packets: 21/0"
+1642440717.656113,"...sent a reply, 0 retransmissions, 538 ms"
+1642440777.117737,
+1642440777.1188622,Current time: 2022-01-17T11:33:07
+1642440777.12003,"Received length: 20, from: 0x0a, to: 0xff, id: 0x5d, header: 0x00"
+1642440777.12236,"Data: node: 10, message: 93, time: 1642419188, Vbat 359 v, Tx dur 386 ms, T: 1943 C, RH: 2219 %, status: 0x20, RSSI -56 dBm, SNR 10 dB, good/bad packets: 23/0"
+1642440777.671566,"...sent a reply, 0 retransmissions, 539 ms"
+1642440837.115776,
+1642440837.116975,Current time: 2022-01-17T11:34:07
+1642440837.1182778,"Received length: 20, from: 0x0a, to: 0xff, id: 0x5e, header: 0x00"
+1642440837.120642,"Data: node: 10, message: 94, time: 1642419248, Vbat 359 v, Tx dur 386 ms, T: 1945 C, RH: 2215 %, status: 0x20, RSSI -56 dBm, SNR 10 dB, good/bad packets: 25/0"
+1642440837.669645,"...sent a reply, 0 retransmissions, 538 ms"
+1642440897.112952,
+1642440897.114045,Current time: 2022-01-17T11:35:07
+1642440897.115228,"Received length: 20, from: 0x0a, to: 0xff, id: 0x5f, header: 0x00"
+1642440897.11761,"Data: node: 10, message: 95, time: 1642419308, Vbat 359 v, Tx dur 386 ms, T: 1949 C, RH: 2208 %, status: 0x20, RSSI -55 dBm, SNR 11 dB, good/bad packets: 27/0"
+1642440897.666741,"...sent a reply, 0 retransmissions, 539 ms"
+1642440957.110121,
+1642440957.111191,Current time: 2022-01-17T11:36:07
+1642440957.112344,"Received length: 20, from: 0x0a, to: 0xff, id: 0x60, header: 0x00"
+1642440957.1146638,"Data: node: 10, message: 96, time: 1642419368, Vbat 359 v, Tx dur 387 ms, T: 1951 C, RH: 2206 %, status: 0x20, RSSI -57 dBm, SNR 9 dB, good/bad packets: 29/0"
+1642440957.663888,"...sent a reply, 0 retransmissions, 539 ms"
+1642441017.107317,
+1642441017.108358,Current time: 2022-01-17T11:37:07
+1642441017.1095822,"Received length: 20, from: 0x0a, to: 0xff, id: 0x61, header: 0x00"
+1642441017.111954,"Data: node: 10, message: 97, time: 1642419428, Vbat 359 v, Tx dur 387 ms, T: 1953 C, RH: 2209 %, status: 0x20, RSSI -56 dBm, SNR 9 dB, good/bad packets: 31/0"
+1642441017.661061,"...sent a reply, 0 retransmissions, 539 ms"
+1642441077.104296,
+1642441077.105879,Current time: 2022-01-17T11:38:07
+1642441077.1067321,"Received length: 20, from: 0x0a, to: 0xff, id: 0x62, header: 0x00"
+1642441077.108468,"Data: node: 10, message: 98, time: 1642419488, Vbat 359 v, Tx dur 386 ms, T: 1958 C, RH: 2214 %, status: 0x20, RSSI -56 dBm, SNR 10 dB, good/bad packets: 33/0"
+1642441077.658178,"...sent a reply, 0 retransmissions, 539 ms"
+1642441137.101562,
+1642441137.102578,Current time: 2022-01-17T11:39:07
+1642441137.10385,"Received length: 20, from: 0x0a, to: 0xff, id: 0x63, header: 0x00, type: data packet"
+1642441137.105681,"Data: node: 10, message: 99, time: 1642419548, Vbat 359 v, Tx dur 386 ms, T: 1958 C, RH: 2208 %, status: 0x20, RSSI -57 dBm, SNR 11 dB, good/bad packets: 1/0"
+1642441137.655346,"...sent a reply, 0 retransmissions, 539 ms"
+1642441197.09869,
+1642441197.0998669,Current time: 2022-01-17T11:40:07
+1642441197.101464,"Received length: 20, from: 0x0a, to: 0xff, id: 0x64, header: 0x00, type: data packet"
+1642441197.103421,"Data: node: 10, message: 100, time: 1642419608, Vbat 359 v, Tx dur 386 ms, T: 1961 C, RH: 2219 %, status: 0x20, RSSI -57 dBm, SNR 9 dB, good/bad packets: 3/0"
+1642441197.652579,"...sent a reply, 0 retransmissions, 539 ms"
+1642441557.081911,
+1642441557.084657,Current time: 2022-01-17T11:46:07
+1642441557.086327,"Received length: 20, from: 0x0a, to: 0xff, id: 0x6a, header: 0x00, type: data packet"
+1642441557.088143,"Data: node: 10, message: 106, time: 1642419968, Vbat 359 v, Tx dur 386 ms, T: 1970 C, RH: 2216 %, status: 0x22, RSSI -53 dBm, SNR 14 dB, good/bad packets: 1/0"
+1642441557.635155,"...sent a reply, 0 retransmissions, 539 ms"
+1642441617.078721,
+1642441617.0800881,Current time: 2022-01-17T11:47:07
+1642441617.0819268,"Received length: 20, from: 0x0a, to: 0xff, id: 0x6b, header: 0x00, type: data packet"
+1642441617.084224,"Data: node: 10, message: 107, time: 1642420028, Vbat 359 v, Tx dur 387 ms, T: 1975 C, RH: 2215 %, status: 0x20, RSSI -56 dBm, SNR 11 dB, good/bad packets: 3/0"
+1642441617.632431,"...sent a reply, 0 retransmissions, 539 ms"
+1642441677.0779772,
+1642441677.0797272,Current time: 2022-01-17T11:48:07
+1642441677.080856,"Received length: 20, from: 0x0a, to: 0xff, id: 0x6c, header: 0x00, type: data packet"
+1642441677.082361,"Data: node: 10, message: 108, time: 1642420088, Vbat 358 v, Tx dur 387 ms, T: 1977 C, RH: 2213 %, status: 0x20, RSSI -53 dBm, SNR 13 dB, good/bad packets: 5/0"
+1642441677.629963,"...sent a reply, 0 retransmissions, 539 ms"
+1642441737.09665,
+1642441737.0978959,Current time: 2022-01-17T11:49:07
+1642441737.099133,"Received length: 20, from: 0x0a, to: 0xff, id: 0x6d, header: 0x00, type: data packet"
+1642441737.100839,"Data: node: 10, message: 109, time: 1642420148, Vbat 359 v, Tx dur 386 ms, T: 1978 C, RH: 2207 %, status: 0x20, RSSI -54 dBm, SNR 13 dB, good/bad packets: 7/0"
+1642441737.6507258,"...sent a reply, 0 retransmissions, 539 ms"
+1642441797.094778,
+1642441797.095838,Current time: 2022-01-17T11:50:07
+1642441797.096962,"Received length: 20, from: 0x0a, to: 0xff, id: 0x6e, header: 0x00, type: data packet"
+1642441797.0992582,"Data: node: 10, message: 110, time: 1642420208, Vbat 359 v, Tx dur 386 ms, T: 1978 C, RH: 2213 %, status: 0x20, RSSI -55 dBm, SNR 11 dB, good/bad packets: 9/0"
+1642441797.6487622,"...sent a reply, 0 retransmissions, 539 ms"
+1642441857.0922391,
+1642441857.093984,Current time: 2022-01-17T11:51:07
+1642441857.09511,"Received length: 20, from: 0x0a, to: 0xff, id: 0x6f, header: 0x00, type: data packet"
+1642441857.0968802,"Data: node: 10, message: 111, time: 1642420268, Vbat 358 v, Tx dur 386 ms, T: 1982 C, RH: 2211 %, status: 0x20, RSSI -55 dBm, SNR 11 dB, good/bad packets: 11/0"
+1642441857.648909,"...sent a reply, 0 retransmissions, 539 ms"
+1642447564.312292,
+1642447564.314642,Current time: 2022-01-17T13:26:15
+1642447564.3159192,"Received length: 20, from: 0x0a, to: 0xff, id: 0x01, header: 0x00, type: data packet"
+1642447564.317624,"Data: node: 10, message: 1, time: 1633952496, Vbat 447 v, Tx dur 0 ms, T: 2040 C, RH: 2581 %, status: 0x20, RSSI -34 dBm, SNR 12 dB, good/bad packets: 1/0"
+1642447564.866018,"...sent a reply, 0 retransmissions, 539 ms"
+1642447567.492005,
+1642447567.493203,Current time: 2022-01-17T13:26:18
+1642447567.494569,"Received length: 20, from: 0x0a, to: 0xff, id: 0x02, header: 0x00, type: data packet"
+1642447567.4963,"Data: node: 10, message: 2, time: 1642425978, Vbat 345 v, Tx dur 387 ms, T: 2040 C, RH: 2583 %, status: 0x20, RSSI -34 dBm, SNR 12 dB, good/bad packets: 3/0"
+1642447568.045747,"...sent a reply, 0 retransmissions, 539 ms"
+1642447897.736159,
+1642447897.7385979,Current time: 2022-01-17T13:31:48
+1642447897.740108,"Received length: 20, from: 0x0a, to: 0xff, id: 0x01, header: 0x00, type: data packet"
+1642447897.742538,"Data: node: 10, message: 1, time: 1633952484, Vbat 447 v, Tx dur 0 ms, T: 2042 C, RH: 2539 %, status: 0x00, RSSI -41 dBm, SNR 13 dB, good/bad packets: 5/0"
+1642447898.2877939,"...sent a reply, 0 retransmissions, 539 ms"
+1642447904.5191429,
+1642447904.520149,Current time: 2022-01-17T13:31:55
+1642447904.521661,"Received length: 20, from: 0x0a, to: 0xff, id: 0x02, header: 0x00, type: data packet"
+1642447904.52418,"Data: node: 10, message: 2, time: 1642426314, Vbat 347 v, Tx dur 386 ms, T: 2040 C, RH: 2534 %, status: 0x04, RSSI -40 dBm, SNR 13 dB, good/bad packets: 7/0"
+1642447905.072795,"...sent a reply, 0 retransmissions, 539 ms"
+1642448504.532515,
+1642448504.534655,Current time: 2022-01-17T13:41:55
+1642448504.536135,"Received length: 20, from: 0x0a, to: 0xff, id: 0x04, header: 0x00, type: data packet"
+1642448504.538573,"Data: node: 10, message: 4, time: 1642426914, Vbat 345 v, Tx dur 386 ms, T: 2234 C, RH: 2349 %, status: 0x04, RSSI -58 dBm, SNR 13 dB, good/bad packets: 3/0"
+1642448505.083084,"...sent a reply, 0 retransmissions, 538 ms"
+1642448804.518377,
+1642448804.520373,Current time: 2022-01-17T13:46:55
+1642448804.5212538,"Received length: 20, from: 0x0a, to: 0xff, id: 0x05, header: 0x00, type: data packet"
+1642448804.523972,"Data: node: 10, message: 5, time: 1642427214, Vbat 346 v, Tx dur 386 ms, T: 2181 C, RH: 2599 %, status: 0x04, RSSI -96 dBm, SNR 10 dB, good/bad packets: 5/0"
+1642448805.071841,"...sent a reply, 0 retransmissions, 538 ms"
+1642449104.520332,
+1642449104.523189,Current time: 2022-01-17T13:51:55
+1642449104.5248902,"Received length: 20, from: 0x0a, to: 0xff, id: 0x06, header: 0x00, type: data packet"
+1642449104.5263932,"Data: node: 10, message: 6, time: 1642427514, Vbat 347 v, Tx dur 386 ms, T: 2135 C, RH: 2641 %, status: 0x04, RSSI -97 dBm, SNR 13 dB, good/bad packets: 1/0"
+1642449105.0715048,"...sent a reply, 0 retransmissions, 539 ms"
+1642449404.520291,
+1642449404.521631,Current time: 2022-01-17T13:56:55
+1642449404.522367,"Received length: 20, from: 0x0a, to: 0xff, id: 0x07, header: 0x00, type: data packet"
+1642449404.523722,"Data: node: 10, message: 7, time: 1642427814, Vbat 349 v, Tx dur 387 ms, T: 1967 C, RH: 2337 %, status: 0x04, RSSI -113 dBm, SNR 7 dB, good/bad packets: 3/0"
+1642449405.074214,"...sent a reply, 0 retransmissions, 539 ms"
+1642449704.509357,
+1642449704.5112169,Current time: 2022-01-17T14:01:55
+1642449704.512821,"Received length: 20, from: 0x0a, to: 0xff, id: 0x08, header: 0x00, type: data packet"
+1642449704.514782,"Data: node: 10, message: 8, time: 1642428114, Vbat 348 v, Tx dur 386 ms, T: 218 C, RH: 7944 %, status: 0x04, RSSI -108 dBm, SNR 10 dB, good/bad packets: 5/0"
+1642449705.062732,"...sent a reply, 0 retransmissions, 539 ms"
+1642450004.5046668,
+1642450004.506031,Current time: 2022-01-17T14:06:55
+1642450004.507138,"Received length: 20, from: 0x0a, to: 0xff, id: 0x09, header: 0x00, type: data packet"
+1642450004.508982,"Data: node: 10, message: 9, time: 1642428414, Vbat 347 v, Tx dur 386 ms, T: 113 C, RH: 8426 %, status: 0x04, RSSI -113 dBm, SNR 7 dB, good/bad packets: 7/0"
+1642450005.058879,"...sent a reply, 0 retransmissions, 539 ms"
+1642450304.503411,
+1642450304.5045178,Current time: 2022-01-17T14:11:55
+1642450304.505742,"Received length: 20, from: 0x0a, to: 0xff, id: 0x0a, header: 0x00, type: data packet"
+1642450304.507574,"Data: node: 10, message: 10, time: 1642428714, Vbat 347 v, Tx dur 386 ms, T: -23 C, RH: 9444 %, status: 0x04, RSSI -129 dBm, SNR -6 dB, good/bad packets: 9/0"
+1642450305.057323,"...sent a reply, 0 retransmissions, 539 ms"
+1642450604.497652,
+1642450604.49872,Current time: 2022-01-17T14:16:55
+1642450604.4999092,"Received length: 20, from: 0x0a, to: 0xff, id: 0x0b, header: 0x00, type: data packet"
+1642450604.501697,"Data: node: 10, message: 11, time: 1642429014, Vbat 346 v, Tx dur 385 ms, T: -43 C, RH: 9509 %, status: 0x04, RSSI -124 dBm, SNR -2 dB, good/bad packets: 11/0"
+1642450605.051479,"...sent a reply, 0 retransmissions, 539 ms"
+1642450904.492429,
+1642450904.494145,Current time: 2022-01-17T14:21:55
+1642450904.4948921,"Received length: 20, from: 0x0a, to: 0xff, id: 0x0c, header: 0x00, type: data packet"
+1642450904.4960692,"Data: node: 10, message: 12, time: 1642429314, Vbat 346 v, Tx dur 385 ms, T: -65 C, RH: 9533 %, status: 0x04, RSSI -118 dBm, SNR 1 dB, good/bad packets: 13/0"
+1642450905.0462651,"...sent a reply, 0 retransmissions, 539 ms"
+1642451204.466967,
+1642451204.468107,Current time: 2022-01-17T14:26:55
+1642451204.46985,"Received length: 20, from: 0x0a, to: 0xff, id: 0x0d, header: 0x00, type: data packet"
+1642451204.471622,"Data: node: 10, message: 13, time: 1642429614, Vbat 346 v, Tx dur 385 ms, T: -84 C, RH: 9557 %, status: 0x04, RSSI -106 dBm, SNR 10 dB, good/bad packets: 15/0"
+1642451205.021431,"...sent a reply, 0 retransmissions, 538 ms"
+1642451504.461389,
+1642451504.462423,Current time: 2022-01-17T14:31:55
+1642451504.4635909,"Received length: 20, from: 0x0a, to: 0xff, id: 0x0e, header: 0x00, type: data packet"
+1642451504.4647748,"Data: node: 10, message: 14, time: 1642429914, Vbat 346 v, Tx dur 384 ms, T: -48 C, RH: 9682 %, status: 0x04, RSSI -90 dBm, SNR 13 dB, good/bad packets: 17/0"
+1642451505.014942,"...sent a reply, 0 retransmissions, 538 ms"
+1642452104.398653,
+1642452104.400845,Current time: 2022-01-17T14:41:55
+1642452104.401995,"Received length: 20, from: 0x0a, to: 0xff, id: 0x10, header: 0x00, type: data packet"
+1642452104.403414,"Data: node: 10, message: 16, time: 1642430514, Vbat 346 v, Tx dur 385 ms, T: 1179 C, RH: 9844 %, status: 0x06, RSSI -80 dBm, SNR 12 dB, good/bad packets: 19/1"
+1642452104.9521449,"...sent a reply, 0 retransmissions, 539 ms"
+1642452404.387875,
+1642452404.389639,Current time: 2022-01-17T14:46:55
+1642452404.390497,"Received length: 20, from: 0x0a, to: 0xff, id: 0x11, header: 0x00, type: data packet"
+1642452404.391969,"Data: node: 10, message: 17, time: 1642430814, Vbat 347 v, Tx dur 385 ms, T: 1221 C, RH: 9873 %, status: 0x04, RSSI -80 dBm, SNR 11 dB, good/bad packets: 21/1"
+1642452404.944715,"...sent a reply, 0 retransmissions, 538 ms"
+1642452704.377536,
+1642452704.37885,Current time: 2022-01-17T14:51:55
+1642452704.3801868,"Received length: 20, from: 0x0a, to: 0xff, id: 0x12, header: 0x00, type: data packet"
+1642452704.3823192,"Data: node: 10, message: 18, time: 1642431114, Vbat 347 v, Tx dur 385 ms, T: 1252 C, RH: 9897 %, status: 0x04, RSSI -79 dBm, SNR 11 dB, good/bad packets: 23/1"
+1642452704.930166,"...sent a reply, 0 retransmissions, 539 ms"
+1642453004.3633122,
+1642453004.364626,Current time: 2022-01-17T14:56:55
+1642453004.365986,"Received length: 20, from: 0x0a, to: 0xff, id: 0x13, header: 0x00, type: data packet"
+1642453004.367893,"Data: node: 10, message: 19, time: 1642431414, Vbat 348 v, Tx dur 385 ms, T: 1195 C, RH: 9892 %, status: 0x04, RSSI -77 dBm, SNR 11 dB, good/bad packets: 1/0"
+1642453004.916857,"...sent a reply, 0 retransmissions, 538 ms"
+1642456600.249061,boot
+1642456600.2706182,Initializing SD card... OK
+1642456600.439185,Starting receiver... OK
+1642456600.44084,Listening on frequency: 902.30
+1642456600.442465,Startup time: 2022-01-17T15:56:51
+1642456728.144583,boot
+1642456728.165511,Initializing SD card... OK
+1642456728.33175,Starting receiver... OK
+1642456728.3337002,Listening on frequency: 902.30
+1642456728.33526,Startup time: 2022-01-17T15:58:59
+1642458481.050389,
+1642458481.051531,Current time: 2022-01-17T16:28:11
+1642458481.052715,"Received length: 20, from: 0x03, to: 0xff, id: 0x01, header: 0x00, type: data packet"
+1642458481.0542002,"Data: node: 3, message: 1, time: 1642433199, Vbat 447 v, Tx dur 0 ms, T: 2004 C, RH: 2411 %, status: 0xa0, RSSI -60 dBm, SNR 11 dB, good/bad packets: 1/0"
+1642458481.602866,"...sent a reply, 0 retransmissions, 539 ms"
+1642458484.241293,
+1642458484.2423759,Current time: 2022-01-17T16:28:15
+1642458484.243666,"Received length: 20, from: 0x03, to: 0xff, id: 0x02, header: 0x00, type: data packet"
+1642458484.2454588,"Data: node: 3, message: 2, time: 1642436894, Vbat 358 v, Tx dur 386 ms, T: 2004 C, RH: 2413 %, status: 0xa0, RSSI -60 dBm, SNR 11 dB, good/bad packets: 3/0"
+1642458484.795302,"...sent a reply, 0 retransmissions, 539 ms"
+1642458544.238919,
+1642458544.2399669,Current time: 2022-01-17T16:29:15
+1642458544.241465,"Received length: 20, from: 0x03, to: 0xff, id: 0x03, header: 0x00, type: data packet"
+1642458544.243856,"Data: node: 3, message: 3, time: 1642436954, Vbat 359 v, Tx dur 387 ms, T: 2011 C, RH: 2433 %, status: 0xa0, RSSI -63 dBm, SNR 12 dB, good/bad packets: 5/0"
+1642458544.7928581,"...sent a reply, 0 retransmissions, 539 ms"
+1642458604.236398,
+1642458604.237499,Current time: 2022-01-17T16:30:15
+1642458604.238956,"Received length: 20, from: 0x03, to: 0xff, id: 0x04, header: 0x00, type: data packet"
+1642458604.2409651,"Data: node: 3, message: 4, time: 1642437014, Vbat 358 v, Tx dur 386 ms, T: 2006 C, RH: 2400 %, status: 0xa0, RSSI -60 dBm, SNR 12 dB, good/bad packets: 7/0"
+1642458604.790366,"...sent a reply, 0 retransmissions, 539 ms"
+1642458681.1616662,
+1642458681.162784,Current time: 2022-01-17T16:31:31
+1642458681.164212,"Received length: 20, from: 0x03, to: 0xff, id: 0x01, header: 0x00, type: data packet"
+1642458681.166306,"Data: node: 3, message: 1, time: 1642433190, Vbat 447 v, Tx dur 0 ms, T: 1995 C, RH: 2414 %, status: 0x20, RSSI -65 dBm, SNR 13 dB, good/bad packets: 9/0"
+1642458681.715654,"...sent a reply, 0 retransmissions, 539 ms"
+1642458684.338503,
+1642458684.3396502,Current time: 2022-01-17T16:31:35
+1642458684.341217,"Received length: 20, from: 0x03, to: 0xff, id: 0x02, header: 0x00, type: data packet"
+1642458684.3429692,"Data: node: 3, message: 2, time: 1642437095, Vbat 359 v, Tx dur 387 ms, T: 1995 C, RH: 2417 %, status: 0x20, RSSI -59 dBm, SNR 13 dB, good/bad packets: 11/0"
+1642458684.892469,"...sent a reply, 0 retransmissions, 539 ms"
+1642459758.899761,boot
+1642459759.0553,Initializing SD card... OK
+1642459759.221525,Starting receiver... OK
+1642459759.2232819,Listening on frequency: 902.30
+1642459759.22486,Startup time: 2022-01-17T16:49:30
+1642459764.329203,
+1642459764.330333,Current time: 2022-01-17T16:49:35
+1642459764.331806,"Received length: 20, from: 0x03, to: 0xff, id: 0x14, header: 0x00, type: data packet"
+1642459764.3335721,"Data: node: 3, message: 20, time: 1642438175, Vbat 359 v, Tx dur 387 ms, T: 1889 C, RH: 2490 %, status: 0x22, RSSI -58 dBm, SNR 14 dB, good/bad packets: 1/0"
+1642459764.8830001,"...sent a reply, 0 retransmissions, 539 ms"
+1642459824.327222,
+1642459824.328197,Current time: 2022-01-17T16:50:35
+1642459824.329661,"Received length: 20, from: 0x03, to: 0xff, id: 0x15, header: 0x00, type: data packet"
+1642459824.3322082,"Data: node: 3, message: 21, time: 1642438235, Vbat 358 v, Tx dur 386 ms, T: 1887 C, RH: 2502 %, status: 0x22, RSSI -60 dBm, SNR 11 dB, good/bad packets: 3/0"
+1642459824.881162,"...sent a reply, 0 retransmissions, 539 ms"
+1642459884.32504,
+1642459884.326145,Current time: 2022-01-17T16:51:35
+1642459884.327574,"Received length: 20, from: 0x03, to: 0xff, id: 0x16, header: 0x00, type: data packet"
+1642459884.32942,"Data: node: 3, message: 22, time: 1642438295, Vbat 358 v, Tx dur 386 ms, T: 1887 C, RH: 2510 %, status: 0x20, RSSI -59 dBm, SNR 13 dB, good/bad packets: 5/0"
+1642459884.879116,"...sent a reply, 0 retransmissions, 539 ms"
+1642459944.322848,
+1642459944.3239,Current time: 2022-01-17T16:52:35
+1642459944.324755,"Received length: 20, from: 0x03, to: 0xff, id: 0x17, header: 0x00, type: data packet"
+1642459944.326106,"Data: node: 3, message: 23, time: 1642438355, Vbat 358 v, Tx dur 387 ms, T: 1884 C, RH: 2516 %, status: 0x20, RSSI -58 dBm, SNR 13 dB, good/bad packets: 7/0"
+1642459944.877022,"...sent a reply, 0 retransmissions, 539 ms"
+1642459991.5202382,
+1642459991.521318,Current time: 2022-01-17T16:53:22
+1642459991.5225868,"Received length: 20, from: 0x03, to: 0xff, id: 0x01, header: 0x00, type: data packet"
+1642459991.5241768,"Data: node: 3, message: 1, time: 1642433190, Vbat 447 v, Tx dur 0 ms, T: 1885 C, RH: 2500 %, status: 0x20, RSSI -61 dBm, SNR 10 dB, good/bad packets: 9/0"
+1642459992.074168,"...sent a reply, 0 retransmissions, 539 ms"
+1642459994.7009778,
+1642459994.702095,Current time: 2022-01-17T16:53:25
+1642459994.703286,"Received length: 20, from: 0x03, to: 0xff, id: 0x02, header: 0x00, type: data packet"
+1642459994.705033,"Data: node: 3, message: 2, time: 1642438405, Vbat 359 v, Tx dur 386 ms, T: 1882 C, RH: 2502 %, status: 0x20, RSSI -61 dBm, SNR 10 dB, good/bad packets: 11/0"
+1642459995.25496,"...sent a reply, 0 retransmissions, 539 ms"
+1642460033.33495,
+1642460033.3360682,Current time: 2022-01-17T16:54:04
+1642460033.337547,"Received length: 20, from: 0x0a, to: 0xff, id: 0x02, header: 0x00, type: data packet"
+1642460033.339283,"Data: node: 10, message: 2, time: 1642434727, Vbat 351 v, Tx dur 386 ms, T: 1750 C, RH: 3086 %, status: 0x22, RSSI -54 dBm, SNR 13 dB, good/bad packets: 13/0"
+1642460033.8916218,"...sent a reply, 0 retransmissions, 539 ms"
+1642460037.334862,
+1642460037.3359659,Current time: 2022-01-17T16:54:08
+1642460037.3372889,"Received length: 20, from: 0x0a, to: 0xff, id: 0x03, header: 0x00, type: data packet"
+1642460037.338882,"Data: node: 10, message: 3, time: 1642438447, Vbat 350 v, Tx dur 386 ms, T: 1749 C, RH: 3074 %, status: 0x20, RSSI -54 dBm, SNR 13 dB, good/bad packets: 15/0"
+1642460037.8888059,"...sent a reply, 0 retransmissions, 539 ms"
+1642460054.6989398,
+1642460054.70006,Current time: 2022-01-17T16:54:25
+1642460054.701568,"Received length: 20, from: 0x03, to: 0xff, id: 0x03, header: 0x00, type: data packet"
+1642460054.70384,"Data: node: 3, message: 3, time: 1642438465, Vbat 358 v, Tx dur 387 ms, T: 1882 C, RH: 2499 %, status: 0x20, RSSI -61 dBm, SNR 11 dB, good/bad packets: 17/0"
+1642460055.252936,"...sent a reply, 0 retransmissions, 540 ms"
+1642460114.6969259,
+1642460114.6980422,Current time: 2022-01-17T16:55:25
+1642460114.699496,"Received length: 20, from: 0x03, to: 0xff, id: 0x04, header: 0x00, type: data packet"
+1642460114.701817,"Data: node: 3, message: 4, time: 1642438525, Vbat 359 v, Tx dur 387 ms, T: 1881 C, RH: 2507 %, status: 0x20, RSSI -59 dBm, SNR 12 dB, good/bad packets: 19/0"
+1642460115.250944,"...sent a reply, 0 retransmissions, 539 ms"
+1642460174.030946,boot
+1642460174.0523908,Initializing SD card... OK
+1642460174.218542,Starting receiver... OK
+1642460174.220309,Listening on frequency: 902.30
+1642460174.2218199,Startup time: 2022-01-17T16:56:25
+1642460174.69264,
+1642460174.693779,Current time: 2022-01-17T16:56:25
+1642460174.6951091,"Received length: 20, from: 0x03, to: 0xff, id: 0x05, header: 0x00, type: data packet"
+1642460174.696863,"Data: node: 3, message: 5, time: 1642438585, Vbat 358 v, Tx dur 386 ms, T: 1879 C, RH: 2510 %, status: 0x20, RSSI -60 dBm, SNR 11 dB, good/bad packets: 1/0"
+1642460175.2465549,"...sent a reply, 0 retransmissions, 538 ms"
+1642460337.3204439,
+1642460337.3214788,Current time: 2022-01-17T16:59:08
+1642460337.3229911,"Received length: 20, from: 0x0a, to: 0xff, id: 0x04, header: 0x00, type: data packet"
+1642460337.324783,"Data: node: 10, message: 4, time: 1642438747, Vbat 351 v, Tx dur 386 ms, T: 1867 C, RH: 3948 %, status: 0x20, RSSI -99 dBm, SNR 12 dB, good/bad packets: 3/0"
+1642460337.874298,"...sent a reply, 0 retransmissions, 539 ms"
+1642460637.310121,
+1642460637.3115468,Current time: 2022-01-17T17:04:08
+1642460637.312705,"Received length: 20, from: 0x0a, to: 0xff, id: 0x05, header: 0x00, type: data packet"
+1642460637.3145568,"Data: node: 10, message: 5, time: 1642439047, Vbat 351 v, Tx dur 386 ms, T: 103 C, RH: 8248 %, status: 0x20, RSSI -104 dBm, SNR 10 dB, good/bad packets: 5/0"
+1642460637.863901,"...sent a reply, 0 retransmissions, 539 ms"
+1642460937.3002691,
+1642460937.301717,Current time: 2022-01-17T17:09:08
+1642460937.303324,"Received length: 20, from: 0x0a, to: 0xff, id: 0x06, header: 0x00, type: data packet"
+1642460937.3058639,"Data: node: 10, message: 6, time: 1642439347, Vbat 350 v, Tx dur 386 ms, T: -13 C, RH: 9184 %, status: 0x20, RSSI -101 dBm, SNR 10 dB, good/bad packets: 1/0"
+1642460937.8540318,"...sent a reply, 0 retransmissions, 539 ms"
+1642460962.391907,boot
+1642460962.413197,Initializing SD card... OK
+1642460962.581753,Starting receiver... OK
+1642460962.583592,Listening on frequency: 902.30
+1642460962.5849931,Startup time: 2022-01-17T17:09:33
