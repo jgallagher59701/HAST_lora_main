@@ -505,6 +505,10 @@ void loop() {
                     Serial.print(F(", "));
                     print_rfm95_info();
 
+                    char text[DATA_LINE_CHARS];
+                    tft_time_request((time_request_t *)rf95_buf, DS3231.now().minute(), DS3231.now().second(), text);
+                    tft_display_data(text);
+
                     // log reading to the SD card, not pretty-printed
                     const char *buf = time_request_to_string((time_request_t *)rf95_buf, false);
                     log_data(FILE_NAME, buf);

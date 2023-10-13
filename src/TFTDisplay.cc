@@ -107,18 +107,13 @@ void tft_get_data_line(const packet_t *data, unsigned int min, unsigned int sec,
 
     parse_data_packet(data, &node, &message, &time, &battery, &last_tx_duration, &temp, &humidity, &status);
 
-#if 0
-    unsigned int min = DS3231.now().minute();
-    unsigned int sec = DS3231.now().second();
-#endif
-
     // write the current line of text to the array 'text'
     snprintf((char *)text, DATA_LINE_CHARS, "%u %02u:%02u %3.1f %u %3.2f 0x%02x",
              node, min, sec, temp / 100.0, humidity / 100, battery / 100.0, (unsigned int)status);
 }
 
 /**
- * @brief Write decoded packet values to display to 'text'
+ * @brief Write decoded packet values to 'text'
  */
 void tft_get_data_line(const data_message_t *data, unsigned int min, unsigned int sec, char text[DATA_LINE_CHARS]) {
     uint8_t node;
@@ -135,6 +130,18 @@ void tft_get_data_line(const data_message_t *data, unsigned int min, unsigned in
     // write the current line of text to the array 'text'
     snprintf((char *)text, DATA_LINE_CHARS, "%u %02u:%02u %3.1f %u %3.2f !x%02x",
              node, min, sec, temp / 100.0, humidity / 100, battery / 100.0, (unsigned int)status);
+}
+
+/**
+ * @brief Write decoded time request to 'text'
+ */
+void tft_time_request(const time_request_t *data, unsigned int min, unsigned int sec, char text[DATA_LINE_CHARS]) {
+    uint8_t node;  // From
+
+    parse_time_request(data, &node);
+
+    // write the current line of text to the array 'text'
+    snprintf((char *)text, DATA_LINE_CHARS, "Time request %u at %02u:%02u", node, min, sec);
 }
 
 #define MAX_LINE 11          // 11 lines can be displayed
