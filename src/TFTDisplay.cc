@@ -42,12 +42,12 @@
   MIT license, all text above must be included in any redistribution
  **************************************************************************/
 
-#include <Adafruit_GFX.h>    // Core graphics library
-#include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
-
+#include <Adafruit_GFX.h>     // Core graphics library
+#include <Adafruit_ST7735.h>  // Hardware-specific library for ST7735
 #include <SPI.h>
 
-#include "data_packet.h"     // Decode information in a data packet
+#include "data_packet.h"  // Decode information in a data packet
+#include "messages.h"
 
 // For the breakout board, you can use any 2 or 3 pins.
 // These pins will also work for the 1.8" TFT shield.
@@ -95,13 +95,12 @@ void tft_display_header()
 /**
  * @brief Write decoded packet values to display to 'text'
  */
-void tft_get_data_line(const packet_t *data, unsigned int min, unsigned int sec, char text[DATA_LINE_CHARS])
-{
+void tft_get_data_line(const packet_t *data, unsigned int min, unsigned int sec, char text[DATA_LINE_CHARS]) {
     uint8_t node;
-    uint32_t message; // not used
-    uint32_t time;  // not used
+    uint32_t message;  // not used
+    uint32_t time;     // not used
     uint16_t battery;
-    uint16_t last_tx_duration; // not used
+    uint16_t last_tx_duration;  // not used
     int16_t temp;
     uint16_t humidity;
     uint8_t status;
@@ -115,8 +114,27 @@ void tft_get_data_line(const packet_t *data, unsigned int min, unsigned int sec,
 
     // write the current line of text to the array 'text'
     snprintf((char *)text, DATA_LINE_CHARS, "%u %02u:%02u %3.1f %u %3.2f 0x%02x",
-                 node, min, sec, temp/100.0, humidity/100, battery/100.0, (unsigned int)status);
+             node, min, sec, temp / 100.0, humidity / 100, battery / 100.0, (unsigned int)status);
+}
 
+/**
+ * @brief Write decoded packet values to display to 'text'
+ */
+void tft_get_data_line(const data_message_t *data, unsigned int min, unsigned int sec, char text[DATA_LINE_CHARS]) {
+    uint8_t node;
+    uint32_t message;  // not used
+    uint32_t time;     // not used
+    uint16_t battery;
+    uint16_t last_tx_duration;  // not used
+    int16_t temp;
+    uint16_t humidity;
+    uint8_t status;
+
+    parse_data_message(data, &node, &message, &time, &battery, &last_tx_duration, &temp, &humidity, &status);
+
+    // write the current line of text to the array 'text'
+    snprintf((char *)text, DATA_LINE_CHARS, "%u %02u:%02u %3.1f %u %3.2f !x%02x",
+             node, min, sec, temp / 100.0, humidity / 100, battery / 100.0, (unsigned int)status);
 }
 
 #define MAX_LINE 11          // 11 lines can be displayed
@@ -135,8 +153,7 @@ unsigned int tft_current_line = 0;
  * text starts at 2, 15 and each subsequent row is 10 pixels more below that
  * (2 and 25, 2 and 35, ...).
  */
-void tft_display_data_packet(const char text[DATA_LINE_CHARS])
-{
+void tft_display_data(const char text[DATA_LINE_CHARS]) {
     // copy the current line of text so it will persist between calls
     memcpy(tft_line_text[tft_current_line], text, DATA_LINE_CHARS); 
 

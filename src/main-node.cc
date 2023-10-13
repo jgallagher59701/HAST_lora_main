@@ -94,7 +94,7 @@ RTC_DS3231 DS3231; // we are using the DS3231 RTC
 // reply will be a time code and the leaf node may reset its internal
 // clock to that time. If this time is in the past relative to the
 // leaf node's boot time value, it may never wake up.
-#define REPLY 1
+#define REPLY 0
 
 // Singleton instance of the radio driver
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
@@ -178,7 +178,7 @@ void write_header(const char *file_name) {
     }
 
     file.println(F("# Start Log"));
-    file.println(F("# Node, Message, Time, Battery V, Last TX Dur ms, Temp C, Hum %, Status"));
+    file.println(F("Node, Message, Time, Battery V, Last TX Dur ms, Temp C, Hum %, Status"));
     file.close();
 
     interrupts(); // enable interrupts
@@ -455,7 +455,7 @@ void loop() {
 
                     char text[DATA_LINE_CHARS];
                     tft_get_data_line((packet_t *)rf95_buf, DS3231.now().minute(), DS3231.now().second(), text);
-                    tft_display_data_packet(text);
+                    tft_display_data(text);
 
                     break;
                 }
@@ -473,6 +473,11 @@ void loop() {
                     // log reading to the SD card, not pretty-printed
                     const char *buf = data_message_to_string((data_message_t *)rf95_buf, false);
                     log_data(FILE_NAME, buf);
+
+                    char text[DATA_LINE_CHARS];
+                    tft_get_data_line((data_message_t *)rf95_buf, DS3231.now().minute(), DS3231.now().second(), text);
+                    tft_display_data(text);
+
                     break;
                 }
 
@@ -499,8 +504,6 @@ void loop() {
 
                     Serial.print(F(", "));
                     print_rfm95_info();
-
-                    
 
                     // log reading to the SD card, not pretty-printed
                     const char *buf = time_request_to_string((time_request_t *)rf95_buf, false);
