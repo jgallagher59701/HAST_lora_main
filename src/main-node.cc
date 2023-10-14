@@ -376,20 +376,23 @@ void send_time_as_reply(uint8_t from)
  * @brief Send the response to a time request
  * @note Resets the rf95 manager's retransmissions counter
  * @param to The node number
+ * @return Return true if an acknowledgement was received, false if not
  */
-void send_time_response(uint8_t to)
+bool send_time_response(uint8_t to)
 {
     yield_spi_to_rf95();
 
     time_response_t tr;
     build_time_response(&tr, MAIN_NODE_ADDRESS, DS3231.now().unixtime());
 
+    bool ack_received = false;
     unsigned long start = millis();
     if (rf95_manager.sendtoWait((uint8_t *)&tr, sizeof(time_response_t), to)) {
         char msg[MSG_LEN];
         snprintf(msg, MSG_LEN, "...sent a reply, %ld retransmissions, %ld ms", rf95_manager.retransmissions(), millis() - start);
         Serial.println(msg);
         Serial.flush();
+        ack_received = true;
     } else {
         char msg[MSG_LEN];
         snprintf(msg, MSG_LEN, "...reply failed, %ld retransmissions, %ld ms", rf95_manager.retransmissions(), millis() - start);
@@ -398,6 +401,38 @@ void send_time_response(uint8_t to)
     }
 
     rf95_manager.resetRetransmissions();
+
+    return ack_received;
+}
+
+/**
+ * Send a response to a node.
+ * @param to Send to this node
+ * @param response The response bytes
+ * @param size The number of bytes to send. Must be less than 251 (RH_RF95_MAX_MESSAGE_LEN)
+ * @return True if the response was acknowledged, false if not.
+ */
+bool send_response(uint8_t to, uint8_t *response, uint8_t size) {
+    yield_spi_to_rf95();
+
+    bool ack_received = false;
+    unsigned long start = millis();
+    if (rf95_manager.sendtoWait((uint8_t *)&response, size, to)) {
+        char msg[MSG_LEN];
+        snprintf(msg, MSG_LEN, "...sent a reply, %ld retransmissions, %ld ms", rf95_manager.retransmissions(), millis() - start);
+        Serial.println(msg);
+        Serial.flush();
+        ack_received = true;
+    } else {
+        char msg[MSG_LEN];
+        snprintf(msg, MSG_LEN, "...reply failed, %ld retransmissions, %ld ms", rf95_manager.retransmissions(), millis() - start);
+        Serial.println(msg);
+        Serial.flush();
+    }
+
+    rf95_manager.resetRetransmissions();
+
+    return ack_received;
 }
 
 uint8_t rf95_buf[RH_RF95_MAX_MESSAGE_LEN];
@@ -501,17 +536,34 @@ void loop() {
                 case time_request: {
                     Serial.print(F("Time request: "));
                     Serial.print(time_request_to_string((time_request_t *)rf95_buf, /* pretty */ true));
-
                     Serial.print(F(", "));
                     print_rfm95_info();
+
+                    uint8_t from;
+                    parse_time_request((time_request_t *)rf95_buf, &from);
 
                     char text[DATA_LINE_CHARS];
                     tft_time_request((time_request_t *)rf95_buf, DS3231.now().minute(), DS3231.now().second(), text);
                     tft_display_data(text);
 
-                    // log reading to the SD card, not pretty-printed
+                    // log time request to the SD card, not pretty-printed
                     const char *buf = time_request_to_string((time_request_t *)rf95_buf, false);
                     log_data(FILE_NAME, buf);
+
+                    // now send the reply   
+                    time_response_t tr;
+                    build_time_response(&tr, MAIN_NODE_ADDRESS, DS3231.now().unixtime());
+                    if (send_response(from, (uint8_t *)&tr, sizeof(time_response_t))) {
+                        memset(text, 0, sizeof(text));
+                        snprintf(text, sizeof(text), "... response ack.");
+                        tft_display_data(text);
+                    }
+                    else {
+                        memset(text, 0, sizeof(text));
+                        snprintf(text, sizeof(text), "... no ack.");
+                        tft_display_data(text);
+                    }
+
                     break;
                 }
 
