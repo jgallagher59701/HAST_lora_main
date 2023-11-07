@@ -4,7 +4,7 @@
   by jhrg
 
   Modified to use the ESP8266 'NodeMCU' board since the AT328 does not
-  have enough memory for the SD card, LoRa and DS3231 clock.
+  have enough memory for the SD card, LoRa and real_time_clock clock.
   10/24/20
 
   And modified again to use the Adafruit Feather M0 (an SAMD21 board
@@ -58,6 +58,20 @@
 
 #define BAUD_RATE 115200
 
+#elif ROCKET_SCREAM
+
+#define RFM95_INT 2  // RF95 Interrupt
+#define RFM95_CS 5   // RF95 SPI CS
+
+#define FLASH_CS 4  // CS for 2MB onboard flash on the SPI bus
+
+#define I2C_SDA 15
+#define I2C_SCL 14
+
+#define SD_CS 10
+
+#define BAUD_RATE 115200
+
 #else
 
 #error "Must define on of FEATHER_M0 or BUILD_ESP8266_NODEMCU"
@@ -65,13 +79,17 @@
 #endif
 
 // Real time clock
-RTC_DS3231 DS3231; // we are using the DS3231 RTC
+#if DS_3231
+RTC_DS3231 real_time_clock;  // we are using the DS3231/DS1307 RTC
+#else
+RTC_DS1307 real_time_clock;
+#endif
 
 // Since this is a compile-time option, first set it, compile and upload the
 // code. That will set the time to something close to the real time (there is
 // some error due to the upload time). Then clear the option, rebuild and
 // upload the code _again_. That will enable restart of the main node so it
-// uses the time value saved by the DS3231 (using the battery backup).
+// uses the time value saved by the RTC (using the battery backup).
 //
 // Set the value using the platformio.ini file. jhrg 6/25/23
 #ifndef ADJUST_TIME
@@ -81,8 +99,13 @@ RTC_DS3231 DS3231; // we are using the DS3231 RTC
 #define MAIN_NODE_ADDRESS 0
 
 // #define FREQUENCY 915.0
+#ifndef FREQUENCY
 #define FREQUENCY 902.3
+#endif
+
+#ifndef SIGNAL_STRENGTH
 #define SIGNAL_STRENGTH 13 // dBm
+#endif
 
 // Use these settings:
 #define BANDWIDTH 125000
@@ -239,8 +262,8 @@ void print_rfm95_info() {
 
 void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
-    pinMode(RFM95_RST, OUTPUT);
     pinMode(RFM95_CS, OUTPUT);
+    pinMode(SD_CS, OUTPUT);
 
     long start_time = millis();
     Serial.begin(BAUD_RATE);
@@ -282,11 +305,14 @@ void setup() {
 
     Serial.print(F("Starting receiver..."));
 
+#if FEATHER_M0
+    pinMode(RFM95_RST, OUTPUT);)
     // LORA manual reset
     digitalWrite(RFM95_RST, LOW);
     delay(20);
     digitalWrite(RFM95_RST, HIGH);
     delay(20);
+#endif
 
     if (rf95_manager.init()) {
         Serial.println(F(" OK"));
@@ -297,6 +323,8 @@ void setup() {
         // to improve the success rate at getting the replay back to the
         // leaf node. jhrg 11/4/20
         rf95_manager.setTimeout(400);
+
+        rf95_manager.setRetries(2);  // default is 3
 
         // Setup ISM FREQUENCY
         rf95.setFrequency(FREQUENCY);
@@ -317,25 +345,23 @@ void setup() {
         Serial.println(F(" receiver initialization failed"));
     }
 
-    if (!DS3231.begin()) {
-        Serial.println("Couldn't find DS3231");
+    if (!real_time_clock.begin()) {
+        Serial.println("Couldn't find RTC");
     }
 
-    if (DS3231.lostPower() || ADJUST_TIME) {
-        if (ADJUST_TIME)
-            Serial.println("ADJUST_TIME option set, set time to compiled value");
-        else
-            Serial.println("RTC lost power, let's set the time!");
-        // When time needs to be set on a new device, or after a power loss, the
-        // following line sets the RTC to the date & time this sketch was compiled
-        DS3231.adjust(DateTime(F(__DATE__), F(__TIME__)));
-        // This line sets the RTC with an explicit date & time, for example to set
-        // January 21, 2014 at 3am you would call:
-        // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
-    }
+#if ADJUST_TIME
+    Serial.println("ADJUST_TIME option set, set time to compiled value");
+
+    // When time needs to be set on a new device, or after a power loss, the
+    // following line sets the RTC to the date & time this sketch was compiled
+    real_time_clock.adjust(DateTime(F(__DATE__), F(__TIME__)));
+    // This line sets the RTC with an explicit date & time, for example to set
+    // January 21, 2014 at 3am you would call:
+    // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
+#endif
 
     Serial.print(F("Startup time: "));
-    DateTime t = DS3231.now();
+    DateTime t = real_time_clock.now();
     Serial.println(iso8601_date_time(t));
 
     Serial.flush();
@@ -353,7 +379,7 @@ void send_time_as_reply(uint8_t from)
 {
     char msg[RH_RF95_MAX_MESSAGE_LEN];
     yield_spi_to_rf95();
-    uint32_t now = DS3231.now().unixtime();
+    uint32_t now = real_time_clock.now().unixtime();
     unsigned long start = millis();
     if (rf95_manager.sendtoWait((uint8_t *)&now, sizeof(now), from)) {
         snprintf(msg, RH_RF95_MAX_MESSAGE_LEN, "...sent a reply, %ld retransmissions, %ld ms", rf95_manager.retransmissions(),
@@ -383,7 +409,7 @@ bool send_time_response(uint8_t to)
     yield_spi_to_rf95();
 
     time_response_t tr;
-    build_time_response(&tr, MAIN_NODE_ADDRESS, DS3231.now().unixtime());
+    build_time_response(&tr, MAIN_NODE_ADDRESS, real_time_clock.now().unixtime());
 
     bool ack_received = false;
     unsigned long start = millis();
@@ -445,7 +471,7 @@ void loop() {
 
         Serial.println();
         Serial.print(F("Current time: "));
-        DateTime t = DS3231.now();
+        DateTime t = real_time_clock.now();
         Serial.println(iso8601_date_time(t));
 
         uint8_t len = sizeof(rf95_buf);
@@ -489,7 +515,7 @@ void loop() {
 #endif
 
                     char text[DATA_LINE_CHARS];
-                    tft_get_data_line((packet_t *)rf95_buf, DS3231.now().minute(), DS3231.now().second(), text);
+                    tft_get_data_line((packet_t *)rf95_buf, real_time_clock.now().minute(), real_time_clock.now().second(), text);
                     tft_display_data(text);
 
                     break;
@@ -510,7 +536,7 @@ void loop() {
                     log_data(FILE_NAME, buf);
 
                     char text[DATA_LINE_CHARS];
-                    tft_get_data_line((data_message_t *)rf95_buf, DS3231.now().minute(), DS3231.now().second(), text);
+                    tft_get_data_line((data_message_t *)rf95_buf, real_time_clock.now().minute(), real_time_clock.now().second(), text);
                     tft_display_data(text);
 
                     break;
@@ -543,7 +569,7 @@ void loop() {
                     parse_time_request((time_request_t *)rf95_buf, &from);
 
                     char text[DATA_LINE_CHARS];
-                    tft_time_request((time_request_t *)rf95_buf, DS3231.now().minute(), DS3231.now().second(), text);
+                    tft_time_request((time_request_t *)rf95_buf, real_time_clock.now().minute(), real_time_clock.now().second(), text);
                     tft_display_data(text);
 
                     // log time request to the SD card, not pretty-printed
@@ -552,7 +578,7 @@ void loop() {
 
                     // now send the reply   
                     time_response_t tr;
-                    build_time_response(&tr, MAIN_NODE_ADDRESS, DS3231.now().unixtime());
+                    build_time_response(&tr, MAIN_NODE_ADDRESS, real_time_clock.now().unixtime());
                     if (send_response(from, (uint8_t *)&tr, sizeof(time_response_t))) {
                         memset(text, 0, sizeof(text));
                         snprintf(text, sizeof(text), "... response ack.");
@@ -569,7 +595,12 @@ void loop() {
 
 
                 default:
-                    Serial.println(F("Got unrecognized message."));
+                    Serial.print(F("Got unrecognized message. Bytes: "));
+                    for (int i = 0; i < len; ++i) {
+                        Serial.print(rf95_buf[i], 16);
+                        Serial.print(", ");
+                    }
+                    Serial.println();
             }
         }
 
