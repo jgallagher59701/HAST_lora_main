@@ -113,11 +113,13 @@ RTC_DS1307 real_time_clock;
 #define CODING_RATE 5
 // RH_CAD_DEFAULT_TIMEOUT 10seconds
 
+#if 0
 // Should the main node send a reply to a leaf node? If so, that
 // reply will be a time code and the leaf node may reset its internal
 // clock to that time. If this time is in the past relative to the
 // leaf node's boot time value, it may never wake up.
 #define REPLY 0
+#endif
 
 // Singleton instance of the radio driver
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
@@ -306,7 +308,7 @@ void setup() {
     Serial.print(F("Starting receiver..."));
 
 #if FEATHER_M0
-    pinMode(RFM95_RST, OUTPUT);)
+    pinMode(RFM95_RST, OUTPUT);
     // LORA manual reset
     digitalWrite(RFM95_RST, LOW);
     delay(20);
@@ -369,6 +371,7 @@ void setup() {
     status_off();
 }
 
+#if 0
 /**
  * @brief Send a reply that includes a time code (unixtime)
  * @note Resets the rf95 manager's retransmissions counter
@@ -395,8 +398,6 @@ void send_time_as_reply(uint8_t from)
 
     rf95_manager.resetRetransmissions();
 }
-
-#define MSG_LEN 128
 
 /**
  * @brief Send the response to a time request
@@ -430,6 +431,9 @@ bool send_time_response(uint8_t to)
 
     return ack_received;
 }
+#endif
+
+#define MSG_LEN 128
 
 /**
  * Send a response to a node.
@@ -478,26 +482,28 @@ void loop() {
         uint8_t from, to, id, header;
         char msg[256];
         if (rf95_manager.recvfromAck(rf95_buf, &len, &from, &to, &id, &header)) {
-
+#if 0
             if (len == sizeof(packet_t)) {  // Backward compatibility hack for packet_t
                 snprintf(msg, 256,
                          "Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x, type: %s",
                          len, from, to, id, header, "data packet");
             }
             else {
-                snprintf(msg, 256,
-                         "Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x, type: %s",
-                         len, from, to, id, header,
-                         get_message_type_string(get_message_type((char *) rf95_buf)));
-
+#endif
+            snprintf(msg, 256,
+                     "Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x, type: %s",
+                     len, from, to, id, header,
+                     get_message_type_string(get_message_type((char *)rf95_buf)));
+#if 0
             }
+#endif
+                Serial.println(msg);
+                Serial.flush();
 
-            Serial.println(msg);
-            Serial.flush();
+                MessageType type = (len == sizeof(packet_t)) ? data_packet : get_message_type((char *)rf95_buf);
 
-            MessageType type = (len == sizeof(packet_t)) ? data_packet : get_message_type((char *)rf95_buf);
-
-            switch (type) {
+                switch (type) {
+#if 0
                 case data_packet: {             // Compatibility with the original packet_t
                     // Print received packet
                     Serial.print(F("Data: "));
@@ -520,7 +526,7 @@ void loop() {
 
                     break;
                 }
-
+#endif
                 // This case depends on changes in soil_sensor_common on the message_changes branch
                 // jhrg 6/25/23
                 case data_message: {            // New data message with type indicator
@@ -592,7 +598,6 @@ void loop() {
 
                     break;
                 }
-
 
                 default:
                     Serial.print(F("Got unrecognized message. Bytes: "));
