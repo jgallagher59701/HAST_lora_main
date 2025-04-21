@@ -113,13 +113,6 @@ RTC_DS1307 real_time_clock;
 #define CODING_RATE 5
 // RH_CAD_DEFAULT_TIMEOUT 10seconds
 
-#if 0
-// Should the main node send a reply to a leaf node? If so, that
-// reply will be a time code and the leaf node may reset its internal
-// clock to that time. If this time is in the past relative to the
-// leaf node's boot time value, it may never wake up.
-#define REPLY 0
-#endif
 
 // Singleton instance of the radio driver
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
@@ -371,68 +364,6 @@ void setup() {
     status_off();
 }
 
-#if 0
-/**
- * @brief Send a reply that includes a time code (unixtime)
- * @note Resets the rf95 manager's retransmissions counter
- * @param from The node number
- * @param msg
- */
-void send_time_as_reply(uint8_t from)
-{
-    char msg[RH_RF95_MAX_MESSAGE_LEN];
-    yield_spi_to_rf95();
-    uint32_t now = real_time_clock.now().unixtime();
-    unsigned long start = millis();
-    if (rf95_manager.sendtoWait((uint8_t *)&now, sizeof(now), from)) {
-        snprintf(msg, RH_RF95_MAX_MESSAGE_LEN, "...sent a reply, %ld retransmissions, %ld ms", rf95_manager.retransmissions(),
-                 millis() - start);
-        Serial.println(msg);
-        Serial.flush();
-    } else {
-        snprintf(msg, RH_RF95_MAX_MESSAGE_LEN, "...reply failed, %ld retransmissions, %ld ms", rf95_manager.retransmissions(),
-                 millis() - start);
-        Serial.println(msg);
-        Serial.flush();
-    }
-
-    rf95_manager.resetRetransmissions();
-}
-
-/**
- * @brief Send the response to a time request
- * @note Resets the rf95 manager's retransmissions counter
- * @param to The node number
- * @return Return true if an acknowledgement was received, false if not
- */
-bool send_time_response(uint8_t to)
-{
-    yield_spi_to_rf95();
-
-    time_response_t tr;
-    build_time_response(&tr, MAIN_NODE_ADDRESS, real_time_clock.now().unixtime());
-
-    bool ack_received = false;
-    unsigned long start = millis();
-    if (rf95_manager.sendtoWait((uint8_t *)&tr, sizeof(time_response_t), to)) {
-        char msg[MSG_LEN];
-        snprintf(msg, MSG_LEN, "...sent a reply, %ld retransmissions, %ld ms", rf95_manager.retransmissions(), millis() - start);
-        Serial.println(msg);
-        Serial.flush();
-        ack_received = true;
-    } else {
-        char msg[MSG_LEN];
-        snprintf(msg, MSG_LEN, "...reply failed, %ld retransmissions, %ld ms", rf95_manager.retransmissions(), millis() - start);
-        Serial.println(msg);
-        Serial.flush();
-    }
-
-    rf95_manager.resetRetransmissions();
-
-    return ack_received;
-}
-#endif
-
 #define MSG_LEN 128
 
 /**
@@ -482,51 +413,17 @@ void loop() {
         uint8_t from, to, id, header;
         char msg[256];
         if (rf95_manager.recvfromAck(rf95_buf, &len, &from, &to, &id, &header)) {
-#if 0
-            if (len == sizeof(packet_t)) {  // Backward compatibility hack for packet_t
-                snprintf(msg, 256,
-                         "Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x, type: %s",
-                         len, from, to, id, header, "data packet");
-            }
-            else {
-#endif
             snprintf(msg, 256,
                      "Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x, type: %s",
                      len, from, to, id, header,
                      get_message_type_string(get_message_type((char *)rf95_buf)));
-#if 0
-            }
-#endif
                 Serial.println(msg);
                 Serial.flush();
 
-                MessageType type = (len == sizeof(packet_t)) ? data_packet : get_message_type((char *)rf95_buf);
+                MessageType type = get_message_type((char *)rf95_buf);
 
                 switch (type) {
-#if 0
-                case data_packet: {             // Compatibility with the original packet_t
-                    // Print received packet
-                    Serial.print(F("Data: "));
-                    Serial.print(data_packet_to_string((packet_t *)rf95_buf, /* pretty */ true));
 
-                    Serial.print(F(", "));
-                    print_rfm95_info();
-
-                    // log reading to the SD card
-                    const char *pretty_buf = data_packet_to_string((packet_t *)rf95_buf, false);
-                    log_data(FILE_NAME, pretty_buf);
-
-#if REPLY
-                    send_time_as_reply(from);
-#endif
-
-                    char text[DATA_LINE_CHARS];
-                    tft_get_data_line((packet_t *)rf95_buf, real_time_clock.now().minute(), real_time_clock.now().second(), text);
-                    tft_display_data(text);
-
-                    break;
-                }
-#endif
                 // This case depends on changes in soil_sensor_common on the message_changes branch
                 // jhrg 6/25/23
                 case data_message: {            // New data message with type indicator
