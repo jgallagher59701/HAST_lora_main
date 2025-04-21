@@ -500,11 +500,13 @@ void loop() {
                     Serial.print(F(", "));
                     print_rfm95_info();
 
-                    
-
                     // log reading to the SD card, not pretty-printed
                     const char *buf = time_request_to_string((time_request_t *)rf95_buf, false);
                     log_data(FILE_NAME, buf);
+
+                    uint8_t to;
+                    parse_time_request((time_request_t *)rf95_buf, &to);
+                    send_time_response(to);
                     break;
                 }
 
