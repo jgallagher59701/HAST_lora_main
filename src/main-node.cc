@@ -26,6 +26,7 @@
 #include "TFTDisplay.h"
 #include "data_packet.h"
 #include "messages.h"
+#include "print.h"
 
 #if defined(ARDUINO_SAMD_ZERO) && defined(SERIAL_PORT_USBVIRTUAL)
 // Required for Serial on Zero based boards
@@ -113,6 +114,7 @@ RTC_DS1307 real_time_clock;
 #define CODING_RATE 5
 // RH_CAD_DEFAULT_TIMEOUT 10seconds
 
+#define SD_CARD_MAX_TRIES 10
 
 // Singleton instance of the radio driver
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
@@ -190,7 +192,7 @@ void write_header(const char *file_name) {
     noInterrupts(); // disable interrupts
 
     if (!file.open(file_name, O_WRONLY | O_CREAT | O_APPEND)) {
-        Serial.println(F("Couldn't write file header"));
+        print("Couldn't write file header");
         sd_card_status = false;
         return;
     }
@@ -220,7 +222,7 @@ void log_data(const char *file_name, const char *data) {
         file.println(data);
         file.close();
     } else {
-        Serial.print(F("Failed to log data."));
+        print("Failed to log data.");
     }
 
     interrupts(); // enable interrupts
@@ -242,6 +244,7 @@ void yield(unsigned long duration_ms) {
 }
 
 void print_rfm95_info() {
+    Serial.print(F("RFM95 info: "));
     Serial.print(F("RSSI "));
     Serial.print(rf95.lastRssi(), DEC);
     Serial.print(F(" dBm, SNR "));
@@ -281,11 +284,11 @@ void setup() {
     // Initialize the SD card
     yield_spi_to_sd();
 
-    Serial.print(F("Initializing SD card..."));
-
     // Initialize at the highest speed supported by the board that is
     // not over 50 MHz. Try a lower speed if SPI errors occur.
-    if (sd.begin(SD_CS, SPI_HALF_SPEED)) { //, SD_SCK_MHZ(50))) {
+    Serial.print(F("Initializing SD card..."));
+ 
+    if (sd.begin(SD_CS, SPI_HALF_SPEED)) {
         Serial.println(F(" OK"));
         sd_card_status = true;
     } else {
@@ -411,27 +414,35 @@ void loop() {
 
         uint8_t len = sizeof(rf95_buf);
         uint8_t from, to, id, header;
-        char msg[256];
+        // char msg[256];
         if (rf95_manager.recvfromAck(rf95_buf, &len, &from, &to, &id, &header)) {
+#if 0
             snprintf(msg, 256,
                      "Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x, type: %s",
                      len, from, to, id, header,
                      get_message_type_string(get_message_type((char *)rf95_buf)));
                 Serial.println(msg);
                 Serial.flush();
+#endif
+            print("Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x, type: %s\n",
+                  len, from, to, id, header,
+                  get_message_type_string(get_message_type((char *)rf95_buf)));
 
-                MessageType type = get_message_type((char *)rf95_buf);
+            MessageType type = get_message_type((char *)rf95_buf);
 
-                switch (type) {
-
+            switch (type) {
                 // This case depends on changes in soil_sensor_common on the message_changes branch
                 // jhrg 6/25/23
-                case data_message: {            // New data message with type indicator
-                    // Print received packet
+                case data_message: {  // New data message with type indicator
+                                      // Print received packet
+#if 0
                     Serial.print(F("Data: "));
                     Serial.print(data_message_to_string((data_message_t *)rf95_buf, /* pretty */ true));
 
                     Serial.print(F(", "));
+#endif
+
+                    print("Data: %s\n", data_message_to_string((data_message_t *)rf95_buf, /* pretty */ true));
                     print_rfm95_info();
 
                     // log reading to the SD card, not pretty-printed
@@ -446,26 +457,33 @@ void loop() {
                 }
 
                 case text: {
+#if 0
                     Serial.print(F("Got: "));
                     // Add a null to the end of the packet and print as text
                     //rf95_buf[len] = 0;
                     Serial.println(text_message_to_string((text_t *)rf95_buf, true /*pretty*/));
 
                     Serial.print(F("RFM95 info: "));
+#endif
+                    print("Got: %s\n", text_message_to_string((text_t *)rf95_buf, true /*pretty*/));
+
                     print_rfm95_info();
 
                     log_data(FILE_NAME, text_message_to_string((text_t *)rf95_buf, false /*pretty*/));
                     break;
                 }
- 
+
                 case join_request:
                     // extract the EUI. Record it and assign a byte node number.
                     break;
 
                 case time_request: {
+#if 0
                     Serial.print(F("Time request: "));
                     Serial.print(time_request_to_string((time_request_t *)rf95_buf, /* pretty */ true));
                     Serial.print(F(", "));
+#endif
+                    print("Time request: %s\n", time_request_to_string((time_request_t *)rf95_buf, /* pretty */ true));
                     print_rfm95_info();
 
                     uint8_t from;
@@ -497,12 +515,12 @@ void loop() {
                 }
 
                 default:
-                    Serial.print(F("Got unrecognized message. Bytes: "));
+                    print("Got unrecognized message. Bytes: ");
                     for (int i = 0; i < len; ++i) {
                         Serial.print(rf95_buf[i], 16);
                         Serial.print(", ");
                     }
-                    Serial.println();
+                    print("\n");
             }
         }
 
