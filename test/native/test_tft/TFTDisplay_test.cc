@@ -1,18 +1,13 @@
+#include "TFTDisplay.h"
+
 #include <unity.h>
 
-#include "TFTDisplay.h"
-#include "data_packet.h"
-
-// tft_get_data_line(const packet_t *data, unsigned int min, unsigned int sec, char text[DATA_LINE_CHARS])
-#if 0
-build_data_packet(packet_t *data, const uint8_t node, const uint32_t message, const uint32_t time,
-                       const uint16_t battery, const uint16_t last_tx_duration,
-                       const int16_t temp, const uint16_t humidity, const uint8_t status);
-#endif
+#include "messages.h"
 
 void test_tft_get_data_line() {
-    packet_t data;
-    build_data_packet(&data, 1, 1, 1, 1, 1, 1, 1, 1);
+    data_message_t data;
+    build_data_message(&data, 1, 1, 1, 1, 1, 1, 1, 1);
+
     char text[DATA_LINE_CHARS];
     tft_get_data_line(&data, 10, 17, text);
     

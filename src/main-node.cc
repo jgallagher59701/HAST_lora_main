@@ -131,7 +131,7 @@ bool sd_card_status = false; // true == SD card init'd
 
 // Given a DateTime instance, return a pointer to static string that holds
 // an ISO 8601 print representation of the object.
-
+#if 0
 char *iso8601_date_time(DateTime &t) {
     static char date_time_str[32];
 
@@ -161,12 +161,20 @@ char *iso8601_date_time(DateTime &t) {
 
     return date_time_str;
 }
+#endif
 
+char *iso8601_date_time(DateTime &t) {
+    static char date_time_str[32];
+    snprintf(date_time_str, sizeof(date_time_str), "%04d-%02d-%02dT%02d:%02d:%02d",
+             t.year(), t.month(), t.day(), t.hour(), t.minute(), t.second());
+
+    return date_time_str;
+}
 /**
     @brief RF95 off the SPI bus to enable SD card access
 */
 void yield_spi_to_sd() {
-    //digitalWrite(SD_CS, LOW);
+    // digitalWrite(SD_CS, LOW);
     digitalWrite(RFM95_CS, HIGH);
 }
 
@@ -175,13 +183,13 @@ void yield_spi_to_sd() {
 */
 void yield_spi_to_rf95() {
     digitalWrite(SD_CS, HIGH);
-    //digitalWrite(RFM95_CS, LOW);
+    // digitalWrite(RFM95_CS, LOW);
 }
 
 /**
-   @brief Write a header for the new log file.
-   @param file_name open/create this file, append if it exists
-   @note Claim the SPI bus
+     @brief Write a header for the new log file.
+    @param file_name open/create this file, append if it exists
+    @note Claim the SPI bus
 */
 void write_header(const char *file_name) {
     if (!sd_card_status)
@@ -189,7 +197,7 @@ void write_header(const char *file_name) {
 
     yield_spi_to_sd();
 
-    noInterrupts(); // disable interrupts
+    noInterrupts();  // disable interrupts
 
     if (!file.open(file_name, O_WRONLY | O_CREAT | O_APPEND)) {
         print("Couldn't write file header");
@@ -201,22 +209,22 @@ void write_header(const char *file_name) {
     file.println(F("Node, Message, Time, Battery V, Last TX Dur ms, Temp C, Hum %, Status"));
     file.close();
 
-    interrupts(); // enable interrupts
+    interrupts();  // enable interrupts
 }
 
 /**
-   @brief log data
-   write data to the log, append a new line
-   @param file_name open for append
-   @param data write this char string
-   @note Claim the SPI bus (calls yield_spi_to_sd()().
+     @brief log data
+    write data to the log, append a new line
+    @param file_name open for append
+    @param data write this char string
+    @note Claim the SPI bus (calls yield_spi_to_sd()().
 */
 void log_data(const char *file_name, const char *data) {
     if (!sd_card_status)
         return;
 
     yield_spi_to_sd();
-    noInterrupts(); // disable interrupts
+    noInterrupts();  // disable interrupts
 
     if (file.open(file_name, O_WRONLY | O_CREAT | O_APPEND)) {
         file.println(data);
@@ -225,7 +233,7 @@ void log_data(const char *file_name, const char *data) {
         print("Failed to log data.");
     }
 
-    interrupts(); // enable interrupts
+    interrupts();  // enable interrupts
 }
 
 void status_on() {
@@ -257,6 +265,9 @@ void print_rfm95_info() {
 
 #define SERIAL_WAIT_TIME 10000      // 10s
 #define ONE_SECOND 1000             // ms
+#define HALF_SECOND 500             // ms
+
+#ifndef PIO_UNIT_TESTING
 
 void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
@@ -287,12 +298,18 @@ void setup() {
     // Initialize at the highest speed supported by the board that is
     // not over 50 MHz. Try a lower speed if SPI errors occur.
     Serial.print(F("Initializing SD card..."));
- 
+
     if (sd.begin(SD_CS, SPI_HALF_SPEED)) {
         Serial.println(F(" OK"));
         sd_card_status = true;
     } else {
         Serial.println(F(" Couldn't init the SD Card"));
+        for (int i = 0; i < 10; ++i) {
+            status_on();
+            delay(HALF_SECOND);
+            status_off();
+            delay(HALF_SECOND);
+        }
         sd_card_status = false;
     }
 
@@ -367,6 +384,8 @@ void setup() {
     status_off();
 }
 
+#endif  // PIO_UNIT_TESTING
+
 #define MSG_LEN 128
 
 /**
@@ -400,6 +419,8 @@ bool send_response(uint8_t to, uint8_t *response, uint8_t size) {
 }
 
 uint8_t rf95_buf[RH_RF95_MAX_MESSAGE_LEN];
+
+#ifndef PIO_UNIT_TESTING
 
 void loop() {
     yield_spi_to_rf95();
@@ -527,3 +548,4 @@ void loop() {
         status_off();
     }
 }
+#endif  // PIO_UNIT_TESTING
