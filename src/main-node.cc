@@ -202,6 +202,7 @@ void write_header(const char *file_name) {
     if (!file.open(file_name, O_WRONLY | O_CREAT | O_APPEND)) {
         print("Couldn't write file header");
         sd_card_status = false;
+        interrupts();  // enable interrupts
         return;
     }
 
@@ -400,7 +401,7 @@ bool send_response(uint8_t to, uint8_t *response, uint8_t size) {
 
     bool ack_received = false;
     unsigned long start = millis();
-    if (rf95_manager.sendtoWait((uint8_t *)&response, size, to)) {
+    if (rf95_manager.sendtoWait(response, size, to)) {
         char msg[MSG_LEN];
         snprintf(msg, MSG_LEN, "...sent a reply, %ld retransmissions, %ld ms", rf95_manager.retransmissions(), millis() - start);
         Serial.println(msg);
@@ -494,9 +495,11 @@ void loop() {
                     break;
                 }
 
+#if SUPPORT_JOIN
                 case join_request:
                     // extract the EUI. Record it and assign a byte node number.
                     break;
+#endif
 
                 case time_request: {
 #if 0
