@@ -4,7 +4,7 @@
   by jhrg
 
   Modified to use the ESP8266 'NodeMCU' board since the AT328 does not
-  have enough memory for the SD card, LoRa and DS3231 clock.
+  have enough memory for the SD card, LoRa and real_time_clock clock.
   10/24/20
 
   And modified again to use the Adafruit Feather M0 (an SAMD21 board
@@ -26,6 +26,7 @@
 #include "TFTDisplay.h"
 #include "data_packet.h"
 #include "messages.h"
+#include "print.h"
 
 #if defined(ARDUINO_SAMD_ZERO) && defined(SERIAL_PORT_USBVIRTUAL)
 // Required for Serial on Zero based boards
@@ -47,12 +48,28 @@
 
 #elif FEATHER_M0
 
+#define DS_3231 1
+
 #define RFM95_INT 3
 #define RFM95_CS 8
 #define RFM95_RST 4
 
 #define I2C_SDA 20
 #define I2C_SCL 21
+
+#define SD_CS 10
+
+#define BAUD_RATE 115200
+
+#elif ROCKET_SCREAM
+
+#define RFM95_INT 2  // RF95 Interrupt
+#define RFM95_CS 5   // RF95 SPI CS
+
+#define FLASH_CS 4  // CS for 2MB onboard flash on the SPI bus
+
+#define I2C_SDA 15
+#define I2C_SCL 14
 
 #define SD_CS 10
 
@@ -65,13 +82,17 @@
 #endif
 
 // Real time clock
-RTC_DS3231 DS3231; // we are using the DS3231 RTC
+#if DS_3231
+RTC_DS3231 real_time_clock;  // we are using the DS3231/DS1307 RTC
+#else
+RTC_DS1307 real_time_clock;
+#endif
 
 // Since this is a compile-time option, first set it, compile and upload the
 // code. That will set the time to something close to the real time (there is
 // some error due to the upload time). Then clear the option, rebuild and
 // upload the code _again_. That will enable restart of the main node so it
-// uses the time value saved by the DS3231 (using the battery backup).
+// uses the time value saved by the RTC (using the battery backup).
 //
 // Set the value using the platformio.ini file. jhrg 6/25/23
 #ifndef ADJUST_TIME
@@ -81,8 +102,13 @@ RTC_DS3231 DS3231; // we are using the DS3231 RTC
 #define MAIN_NODE_ADDRESS 0
 
 // #define FREQUENCY 915.0
+#ifndef FREQUENCY
 #define FREQUENCY 902.3
+#endif
+
+#ifndef SIGNAL_STRENGTH
 #define SIGNAL_STRENGTH 13 // dBm
+#endif
 
 // Use these settings:
 #define BANDWIDTH 125000
@@ -90,11 +116,7 @@ RTC_DS3231 DS3231; // we are using the DS3231 RTC
 #define CODING_RATE 5
 // RH_CAD_DEFAULT_TIMEOUT 10seconds
 
-// Should the main node send a reply to a leaf node? If so, that
-// reply will be a time code and the leaf node may reset its internal
-// clock to that time. If this time is in the past relative to the
-// leaf node's boot time value, it may never wake up.
-#define REPLY 1
+#define SD_CARD_MAX_TRIES 10
 
 // Singleton instance of the radio driver
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
@@ -111,7 +133,7 @@ bool sd_card_status = false; // true == SD card init'd
 
 // Given a DateTime instance, return a pointer to static string that holds
 // an ISO 8601 print representation of the object.
-
+#if 0
 char *iso8601_date_time(DateTime &t) {
     static char date_time_str[32];
 
@@ -141,13 +163,21 @@ char *iso8601_date_time(DateTime &t) {
 
     return date_time_str;
 }
+#endif
 
+char *iso8601_date_time(DateTime &t) {
+    static char date_time_str[32];
+    snprintf(date_time_str, sizeof(date_time_str), "%04d-%02d-%02dT%02d:%02d:%02d",
+             t.year(), t.month(), t.day(), t.hour(), t.minute(), t.second());
+
+    return date_time_str;
+}
 /**
     @brief RF95 off the SPI bus to enable SD card access
 */
 void yield_spi_to_sd() {
-    //digitalWrite(SD_CS, LOW);
     digitalWrite(RFM95_CS, HIGH);
+    // digitalWrite(SD_CS, LOW);
 }
 
 /**
@@ -155,13 +185,13 @@ void yield_spi_to_sd() {
 */
 void yield_spi_to_rf95() {
     digitalWrite(SD_CS, HIGH);
-    //digitalWrite(RFM95_CS, LOW);
+    // digitalWrite(RFM95_CS, LOW);
 }
 
 /**
-   @brief Write a header for the new log file.
-   @param file_name open/create this file, append if it exists
-   @note Claim the SPI bus
+     @brief Write a header for the new log file.
+    @param file_name open/create this file, append if it exists
+    @note Claim the SPI bus
 */
 void write_header(const char *file_name) {
     if (!sd_card_status)
@@ -169,43 +199,44 @@ void write_header(const char *file_name) {
 
     yield_spi_to_sd();
 
-    noInterrupts(); // disable interrupts
+    noInterrupts();  // disable interrupts
 
     if (!file.open(file_name, O_WRONLY | O_CREAT | O_APPEND)) {
-        Serial.println(F("Couldn't write file header"));
+        print("Couldn't write file header");
         sd_card_status = false;
+        interrupts();  // enable interrupts
         return;
     }
 
     file.println(F("# Start Log"));
-    file.println(F("# Node, Message, Time, Battery V, Last TX Dur ms, Temp C, Hum %, Status"));
+    file.println(F("Node, Message, Time, Battery V, Last TX Dur ms, Temp C, Hum %, Status"));
     file.close();
 
-    interrupts(); // enable interrupts
+    interrupts();  // enable interrupts
 }
 
 /**
-   @brief log data
-   write data to the log, append a new line
-   @param file_name open for append
-   @param data write this char string
-   @note Claim the SPI bus (calls yield_spi_to_sd()().
+     @brief log data
+    write data to the log, append a new line
+    @param file_name open for append
+    @param data write this char string
+    @note Claim the SPI bus (calls yield_spi_to_sd()().
 */
 void log_data(const char *file_name, const char *data) {
     if (!sd_card_status)
         return;
 
     yield_spi_to_sd();
-    noInterrupts(); // disable interrupts
+    noInterrupts();  // disable interrupts
 
     if (file.open(file_name, O_WRONLY | O_CREAT | O_APPEND)) {
         file.println(data);
         file.close();
     } else {
-        Serial.print(F("Failed to log data."));
+        print("Failed to log data.");
     }
 
-    interrupts(); // enable interrupts
+    interrupts();  // enable interrupts
 }
 
 void status_on() {
@@ -224,6 +255,7 @@ void yield(unsigned long duration_ms) {
 }
 
 void print_rfm95_info() {
+    Serial.print(F("RFM95 info: "));
     Serial.print(F("RSSI "));
     Serial.print(rf95.lastRssi(), DEC);
     Serial.print(F(" dBm, SNR "));
@@ -236,11 +268,14 @@ void print_rfm95_info() {
 
 #define SERIAL_WAIT_TIME 10000      // 10s
 #define ONE_SECOND 1000             // ms
+#define HALF_SECOND 500             // ms
+
+#ifndef PIO_UNIT_TESTING
 
 void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
-    pinMode(RFM95_RST, OUTPUT);
     pinMode(RFM95_CS, OUTPUT);
+    pinMode(SD_CS, OUTPUT);
 
     long start_time = millis();
     Serial.begin(BAUD_RATE);
@@ -263,15 +298,22 @@ void setup() {
     // Initialize the SD card
     yield_spi_to_sd();
 
-    Serial.print(F("Initializing SD card..."));
-
     // Initialize at the highest speed supported by the board that is
     // not over 50 MHz. Try a lower speed if SPI errors occur.
-    if (sd.begin(SD_CS, SPI_HALF_SPEED)) { //, SD_SCK_MHZ(50))) {
+    Serial.print(F("Initializing SD card..."));
+
+    if (sd.begin(SD_CS, SPI_HALF_SPEED)) {
         Serial.println(F(" OK"));
         sd_card_status = true;
     } else {
         Serial.println(F(" Couldn't init the SD Card"));
+        sd.initErrorPrint(&Serial);
+        for (int i = 0; i < 10; ++i) {
+            status_on();
+            delay(HALF_SECOND);
+            status_off();
+            delay(HALF_SECOND);
+        }
         sd_card_status = false;
     }
 
@@ -282,11 +324,14 @@ void setup() {
 
     Serial.print(F("Starting receiver..."));
 
+#if FEATHER_M0
+    pinMode(RFM95_RST, OUTPUT);
     // LORA manual reset
     digitalWrite(RFM95_RST, LOW);
     delay(20);
     digitalWrite(RFM95_RST, HIGH);
     delay(20);
+#endif
 
     if (rf95_manager.init()) {
         Serial.println(F(" OK"));
@@ -297,6 +342,8 @@ void setup() {
         // to improve the success rate at getting the replay back to the
         // leaf node. jhrg 11/4/20
         rf95_manager.setTimeout(400);
+
+        rf95_manager.setRetries(2);  // default is 3
 
         // Setup ISM FREQUENCY
         rf95.setFrequency(FREQUENCY);
@@ -317,25 +364,23 @@ void setup() {
         Serial.println(F(" receiver initialization failed"));
     }
 
-    if (!DS3231.begin()) {
-        Serial.println("Couldn't find DS3231");
+    if (!real_time_clock.begin()) {
+        Serial.println("Couldn't find RTC");
     }
 
-    if (DS3231.lostPower() || ADJUST_TIME) {
-        if (ADJUST_TIME)
-            Serial.println("ADJUST_TIME option set, set time to compiled value");
-        else
-            Serial.println("RTC lost power, let's set the time!");
-        // When time needs to be set on a new device, or after a power loss, the
-        // following line sets the RTC to the date & time this sketch was compiled
-        DS3231.adjust(DateTime(F(__DATE__), F(__TIME__)));
-        // This line sets the RTC with an explicit date & time, for example to set
-        // January 21, 2014 at 3am you would call:
-        // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
-    }
+#if ADJUST_TIME
+    Serial.println("ADJUST_TIME option set, set time to compiled value");
+
+    // When time needs to be set on a new device, or after a power loss, the
+    // following line sets the RTC to the date & time this sketch was compiled
+    real_time_clock.adjust(DateTime(F(__DATE__), F(__TIME__)));
+    // This line sets the RTC with an explicit date & time, for example to set
+    // January 21, 2014 at 3am you would call:
+    // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
+#endif
 
     Serial.print(F("Startup time: "));
-    DateTime t = DS3231.now();
+    DateTime t = real_time_clock.now();
     Serial.println(iso8601_date_time(t));
 
     Serial.flush();
@@ -343,53 +388,28 @@ void setup() {
     status_off();
 }
 
-/**
- * @brief Send a reply that includes a time code (unixtime)
- * @note Resets the rf95 manager's retransmissions counter
- * @param from The node number
- * @param msg
- */
-void send_time_as_reply(uint8_t from)
-{
-    char msg[RH_RF95_MAX_MESSAGE_LEN];
-    yield_spi_to_rf95();
-    uint32_t now = DS3231.now().unixtime();
-    unsigned long start = millis();
-    if (rf95_manager.sendtoWait((uint8_t *)&now, sizeof(now), from)) {
-        snprintf(msg, RH_RF95_MAX_MESSAGE_LEN, "...sent a reply, %ld retransmissions, %ld ms", rf95_manager.retransmissions(),
-                 millis() - start);
-        Serial.println(msg);
-        Serial.flush();
-    } else {
-        snprintf(msg, RH_RF95_MAX_MESSAGE_LEN, "...reply failed, %ld retransmissions, %ld ms", rf95_manager.retransmissions(),
-                 millis() - start);
-        Serial.println(msg);
-        Serial.flush();
-    }
-
-    rf95_manager.resetRetransmissions();
-}
+#endif  // PIO_UNIT_TESTING
 
 #define MSG_LEN 128
 
 /**
- * @brief Send the response to a time request
- * @note Resets the rf95 manager's retransmissions counter
- * @param to The node number
+ * Send a response to a node.
+ * @param to Send to this node
+ * @param response The response bytes
+ * @param size The number of bytes to send. Must be less than 251 (RH_RF95_MAX_MESSAGE_LEN)
+ * @return True if the response was acknowledged, false if not.
  */
-void send_time_response(uint8_t to)
-{
+bool send_response(uint8_t to, uint8_t *response, uint8_t size) {
     yield_spi_to_rf95();
 
-    time_response_t tr;
-    build_time_response(&tr, MAIN_NODE_ADDRESS, DS3231.now().unixtime());
-
+    bool ack_received = false;
     unsigned long start = millis();
-    if (rf95_manager.sendtoWait((uint8_t *)&tr, sizeof(time_response_t), to)) {
+    if (rf95_manager.sendtoWait(response, size, to)) {
         char msg[MSG_LEN];
         snprintf(msg, MSG_LEN, "...sent a reply, %ld retransmissions, %ld ms", rf95_manager.retransmissions(), millis() - start);
         Serial.println(msg);
         Serial.flush();
+        ack_received = true;
     } else {
         char msg[MSG_LEN];
         snprintf(msg, MSG_LEN, "...reply failed, %ld retransmissions, %ld ms", rf95_manager.retransmissions(), millis() - start);
@@ -398,9 +418,13 @@ void send_time_response(uint8_t to)
     }
 
     rf95_manager.resetRetransmissions();
+
+    return ack_received;
 }
 
 uint8_t rf95_buf[RH_RF95_MAX_MESSAGE_LEN];
+
+#ifndef PIO_UNIT_TESTING
 
 void loop() {
     yield_spi_to_rf95();
@@ -410,94 +434,83 @@ void loop() {
 
         Serial.println();
         Serial.print(F("Current time: "));
-        DateTime t = DS3231.now();
+        DateTime t = real_time_clock.now();
         Serial.println(iso8601_date_time(t));
 
         uint8_t len = sizeof(rf95_buf);
         uint8_t from, to, id, header;
-        char msg[256];
+        // char msg[256];
         if (rf95_manager.recvfromAck(rf95_buf, &len, &from, &to, &id, &header)) {
+#if 0
+            snprintf(msg, 256,
+                     "Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x, type: %s",
+                     len, from, to, id, header,
+                     get_message_type_string(get_message_type((char *)rf95_buf)));
+                Serial.println(msg);
+                Serial.flush();
+#endif
+            print("Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x, type: %s\n",
+                  len, from, to, id, header,
+                  get_message_type_string(get_message_type((char *)rf95_buf)));
 
-            if (len == sizeof(packet_t)) {  // Backward compatibility hack for packet_t
-                snprintf(msg, 256,
-                         "Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x, type: %s",
-                         len, from, to, id, header, "data packet");
-            }
-            else {
-                snprintf(msg, 256,
-                         "Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x, type: %s",
-                         len, from, to, id, header,
-                         get_message_type_string(get_message_type((char *) rf95_buf)));
-
-            }
-
-            Serial.println(msg);
-            Serial.flush();
-
-            MessageType type = (len == sizeof(packet_t)) ? data_packet : get_message_type((char *)rf95_buf);
+            MessageType type = get_message_type((char *)rf95_buf);
 
             switch (type) {
-                case data_packet: {             // Compatibility with the original packet_t
-                    // Print received packet
-                    Serial.print(F("Data: "));
-                    Serial.print(data_packet_to_string((packet_t *)rf95_buf, /* pretty */ true));
-
-                    Serial.print(F(", "));
-                    print_rfm95_info();
-
-                    // log reading to the SD card
-                    const char *pretty_buf = data_packet_to_string((packet_t *)rf95_buf, false);
-                    log_data(FILE_NAME, pretty_buf);
-
-#if REPLY
-                    send_time_as_reply(from);
-#endif
-
-                    char text[DATA_LINE_CHARS];
-                    tft_get_data_line((packet_t *)rf95_buf, DS3231.now().minute(), DS3231.now().second(), text);
-                    tft_display_data_packet(text);
-
-                    break;
-                }
-
                 // This case depends on changes in soil_sensor_common on the message_changes branch
                 // jhrg 6/25/23
-                case data_message: {            // New data message with type indicator
-                    // Print received packet
+                case data_message: {  // New data message with type indicator
+                                      // Print received packet
+#if 0
                     Serial.print(F("Data: "));
                     Serial.print(data_message_to_string((data_message_t *)rf95_buf, /* pretty */ true));
 
                     Serial.print(F(", "));
+#endif
+
+                    print("Data: %s\n", data_message_to_string((data_message_t *)rf95_buf, /* pretty */ true));
                     print_rfm95_info();
 
                     // log reading to the SD card, not pretty-printed
                     const char *buf = data_message_to_string((data_message_t *)rf95_buf, false);
                     log_data(FILE_NAME, buf);
+
+                    char text[DATA_LINE_CHARS];
+                    tft_get_data_line((data_message_t *)rf95_buf, real_time_clock.now().minute(), real_time_clock.now().second(), text);
+                    tft_display_data(text);
+
                     break;
                 }
 
                 case text: {
+#if 0
                     Serial.print(F("Got: "));
                     // Add a null to the end of the packet and print as text
                     //rf95_buf[len] = 0;
                     Serial.println(text_message_to_string((text_t *)rf95_buf, true /*pretty*/));
 
                     Serial.print(F("RFM95 info: "));
+#endif
+                    print("Got: %s\n", text_message_to_string((text_t *)rf95_buf, true /*pretty*/));
+
                     print_rfm95_info();
 
                     log_data(FILE_NAME, text_message_to_string((text_t *)rf95_buf, false /*pretty*/));
                     break;
                 }
- 
+
+#if SUPPORT_JOIN
                 case join_request:
                     // extract the EUI. Record it and assign a byte node number.
                     break;
+#endif
 
                 case time_request: {
+#if 0
                     Serial.print(F("Time request: "));
                     Serial.print(time_request_to_string((time_request_t *)rf95_buf, /* pretty */ true));
-
                     Serial.print(F(", "));
+#endif
+                    print("Time request: %s\n", time_request_to_string((time_request_t *)rf95_buf, /* pretty */ true));
                     print_rfm95_info();
 
                     // log reading to the SD card, not pretty-printed
@@ -510,12 +523,17 @@ void loop() {
                     break;
                 }
 
-
                 default:
-                    Serial.println(F("Got unrecognized message."));
+                    print("Got unrecognized message. Bytes: ");
+                    for (int i = 0; i < len; ++i) {
+                        Serial.print(rf95_buf[i], 16);
+                        Serial.print(", ");
+                    }
+                    print("\n");
             }
         }
 
         status_off();
     }
 }
+#endif  // PIO_UNIT_TESTING
