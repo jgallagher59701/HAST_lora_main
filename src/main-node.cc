@@ -48,6 +48,8 @@
 
 #elif FEATHER_M0
 
+#define DS_3231 1
+
 #define RFM95_INT 3
 #define RFM95_CS 8
 #define RFM95_RST 4
@@ -174,8 +176,8 @@ char *iso8601_date_time(DateTime &t) {
     @brief RF95 off the SPI bus to enable SD card access
 */
 void yield_spi_to_sd() {
-    // digitalWrite(SD_CS, LOW);
     digitalWrite(RFM95_CS, HIGH);
+    // digitalWrite(SD_CS, LOW);
 }
 
 /**
@@ -305,6 +307,7 @@ void setup() {
         sd_card_status = true;
     } else {
         Serial.println(F(" Couldn't init the SD Card"));
+        sd.initErrorPrint(&Serial);
         for (int i = 0; i < 10; ++i) {
             status_on();
             delay(HALF_SECOND);
