@@ -513,13 +513,31 @@ void loop() {
                     print("Time request: %s\n", time_request_to_string((time_request_t *)rf95_buf, /* pretty */ true));
                     print_rfm95_info();
 
-                    // log reading to the SD card, not pretty-printed
+                    uint8_t from;
+                    parse_time_request((time_request_t *)rf95_buf, &from);
+
+                    char text[DATA_LINE_CHARS];
+                    tft_time_request((time_request_t *)rf95_buf, real_time_clock.now().minute(), real_time_clock.now().second(), text);
+                    tft_display_data(text);
+
+                    // log time request to the SD card, not pretty-printed
                     const char *buf = time_request_to_string((time_request_t *)rf95_buf, false);
                     log_data(FILE_NAME, buf);
 
-                    uint8_t to;
-                    parse_time_request((time_request_t *)rf95_buf, &to);
-                    send_time_response(to);
+                    // now send the reply   
+                    time_response_t tr;
+                    build_time_response(&tr, MAIN_NODE_ADDRESS, real_time_clock.now().unixtime());
+                    if (send_response(from, (uint8_t *)&tr, sizeof(time_response_t))) {
+                        memset(text, 0, sizeof(text));
+                        snprintf(text, sizeof(text), "... response ack.");
+                        tft_display_data(text);
+                    }
+                    else {
+                        memset(text, 0, sizeof(text));
+                        snprintf(text, sizeof(text), "... no ack.");
+                        tft_display_data(text);
+                    }
+
                     break;
                 }
 
