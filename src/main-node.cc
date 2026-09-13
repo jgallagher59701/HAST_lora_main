@@ -131,6 +131,12 @@ SdFile file; // Log file.
 
 bool sd_card_status = false; // true == SD card init'd
 
+// Set whenever an SD card operation fails. Used to leave the status LED lit
+// as a simple, persistent fault indicator until per-device status
+// indicators (SD card, LoRa, clock) are added in a future hardware
+// revision. jhrg 9/12/26
+bool sd_card_error = false;
+
 // Given a DateTime instance, return a pointer to static string that holds
 // an ISO 8601 print representation of the object.
 char *iso8601_date_time(DateTime &t) {
@@ -172,6 +178,7 @@ void write_header(const char *file_name) {
     if (!file.open(file_name, O_WRONLY | O_CREAT | O_APPEND)) {
         print("Couldn't write file header");
         sd_card_status = false;
+        sd_card_error = true;
         interrupts();  // enable interrupts
         return;
     }
@@ -208,6 +215,7 @@ void log_data(const char *file_name, const char *data) {
         if (!sd.begin(SD_CS, SPI_HALF_SPEED)) {
             sd.initErrorPrint(&Serial);
             sd_card_status = false;
+            sd_card_error = true;
             return;
         }
 
@@ -218,6 +226,7 @@ void log_data(const char *file_name, const char *data) {
         if (!opened) {
             print("Failed to log data after SD card re-init.\n");
             sd_card_status = false;
+            sd_card_error = true;
             return;
         }
     }
@@ -233,7 +242,11 @@ void status_on() {
 }
 
 void status_off() {
-    digitalWrite(LED_BUILTIN, LOW);
+    // Leave the LED lit while an SD card error is latched, so it acts as a
+    // persistent fault indicator instead of being cleared by the next
+    // normal status_off() call (e.g. after handling a received message).
+    if (!sd_card_error)
+        digitalWrite(LED_BUILTIN, LOW);
 }
 
 void yield(unsigned long duration_ms) {
@@ -311,6 +324,9 @@ void setup() {
             status_off();
             delay(HALF_SECOND);
         }
+        // Latch the status LED on as a persistent fault indicator.
+        sd_card_error = true;
+        status_on();
     }
 
     // Write data header.
@@ -435,7 +451,6 @@ void loop() {
 
         uint8_t len = sizeof(rf95_buf);
         uint8_t from, to, id, header;
-        // char msg[256];
         if (rf95_manager.recvfromAck(rf95_buf, &len, &from, &to, &id, &header)) {
             print("Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x, type: %s\n",
                   len, from, to, id, header,
