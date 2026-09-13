@@ -133,38 +133,6 @@ bool sd_card_status = false; // true == SD card init'd
 
 // Given a DateTime instance, return a pointer to static string that holds
 // an ISO 8601 print representation of the object.
-#if 0
-char *iso8601_date_time(DateTime &t) {
-    static char date_time_str[32];
-
-    char val[12];
-    date_time_str[0] = '\0';
-    strncat(date_time_str, itoa(t.year(), val, 10), sizeof(date_time_str) - 1);
-    strncat(date_time_str, "-", sizeof(date_time_str) - 1);
-    if (t.month() < 10)
-        strncat(date_time_str, "0", sizeof(date_time_str) - 1);
-    strncat(date_time_str, itoa(t.month(), val, 10), sizeof(date_time_str) - 1);
-    strncat(date_time_str, "-", sizeof(date_time_str) - 1);
-    if (t.day() < 10)
-        strncat(date_time_str, "0", sizeof(date_time_str) - 1);
-    strncat(date_time_str, itoa(t.day(), val, 10), sizeof(date_time_str) - 1);
-    strncat(date_time_str, "T", sizeof(date_time_str) - 1);
-    if (t.hour() < 10)
-        strncat(date_time_str, "0", sizeof(date_time_str) - 1);
-    strncat(date_time_str, itoa(t.hour(), val, 10), sizeof(date_time_str) - 1);
-    strncat(date_time_str, ":", sizeof(date_time_str) - 1);
-    if (t.minute() < 10)
-        strncat(date_time_str, "0", sizeof(date_time_str) - 1);
-    strncat(date_time_str, itoa(t.minute(), val, 10), sizeof(date_time_str) - 1);
-    strncat(date_time_str, ":", sizeof(date_time_str) - 1);
-    if (t.second() < 10)
-        strncat(date_time_str, "0", sizeof(date_time_str) - 1);
-    strncat(date_time_str, itoa(t.second(), val, 10), sizeof(date_time_str) - 1);
-
-    return date_time_str;
-}
-#endif
-
 char *iso8601_date_time(DateTime &t) {
     static char date_time_str[32];
     snprintf(date_time_str, sizeof(date_time_str), "%04d-%02d-%02dT%02d:%02d:%02d",
@@ -177,7 +145,7 @@ char *iso8601_date_time(DateTime &t) {
 */
 void yield_spi_to_sd() {
     digitalWrite(RFM95_CS, HIGH);
-    // digitalWrite(SD_CS, LOW);
+    digitalWrite(SD_CS, LOW);
 }
 
 /**
@@ -185,11 +153,11 @@ void yield_spi_to_sd() {
 */
 void yield_spi_to_rf95() {
     digitalWrite(SD_CS, HIGH);
-    // digitalWrite(RFM95_CS, LOW);
+    digitalWrite(RFM95_CS, LOW);
 }
 
 /**
-     @brief Write a header for the new log file.
+    @brief Write a header for the new log file.
     @param file_name open/create this file, append if it exists
     @note Claim the SPI bus
 */
@@ -216,7 +184,7 @@ void write_header(const char *file_name) {
 }
 
 /**
-     @brief log data
+    @brief log data
     write data to the log, append a new line
     @param file_name open for append
     @param data write this char string
@@ -228,15 +196,36 @@ void log_data(const char *file_name, const char *data) {
 
     yield_spi_to_sd();
     noInterrupts();  // disable interrupts
+    bool opened = file.open(file_name, O_WRONLY | O_CREAT | O_APPEND);
+    interrupts();  // enable interrupts
 
-    if (file.open(file_name, O_WRONLY | O_CREAT | O_APPEND)) {
-        file.println(data);
-        file.close();
-    } else {
-        print("Failed to log data.");
+    if (!opened) {
+        // The card may have wedged since it was last used successfully;
+        // re-init it and retry once before giving up. jhrg 9/12/26
+        print("Failed to log data, error: 0x%02x. Re-initializing the SD card.\n", file.getError());
+
+        yield_spi_to_sd();
+        if (!sd.begin(SD_CS, SPI_HALF_SPEED)) {
+            sd.initErrorPrint(&Serial);
+            sd_card_status = false;
+            return;
+        }
+
+        noInterrupts();
+        opened = file.open(file_name, O_WRONLY | O_CREAT | O_APPEND);
+        interrupts();
+
+        if (!opened) {
+            print("Failed to log data after SD card re-init.\n");
+            sd_card_status = false;
+            return;
+        }
     }
 
-    interrupts();  // enable interrupts
+    noInterrupts();
+    file.println(data);
+    file.close();
+    interrupts();
 }
 
 void status_on() {
@@ -302,9 +291,17 @@ void setup() {
     // not over 50 MHz. Try a lower speed if SPI errors occur.
     Serial.print(F("Initializing SD card..."));
 
-    if (sd.begin(SD_CS, SPI_HALF_SPEED)) {
+    // A warm reset (as opposed to a full power cycle) can leave the SD card
+    // in a state where the first begin() fails even though the card is
+    // fine; retry a few times before giving up. jhrg 9/12/26
+    for (int attempt = 0; attempt < SD_CARD_MAX_TRIES && !sd_card_status; ++attempt) {
+        sd_card_status = sd.begin(SD_CS, SPI_HALF_SPEED);
+        if (!sd_card_status)
+            delay(HALF_SECOND);
+    }
+
+    if (sd_card_status) {
         Serial.println(F(" OK"));
-        sd_card_status = true;
     } else {
         Serial.println(F(" Couldn't init the SD Card"));
         sd.initErrorPrint(&Serial);
@@ -314,7 +311,6 @@ void setup() {
             status_off();
             delay(HALF_SECOND);
         }
-        sd_card_status = false;
     }
 
     // Write data header.
@@ -441,14 +437,6 @@ void loop() {
         uint8_t from, to, id, header;
         // char msg[256];
         if (rf95_manager.recvfromAck(rf95_buf, &len, &from, &to, &id, &header)) {
-#if 0
-            snprintf(msg, 256,
-                     "Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x, type: %s",
-                     len, from, to, id, header,
-                     get_message_type_string(get_message_type((char *)rf95_buf)));
-                Serial.println(msg);
-                Serial.flush();
-#endif
             print("Received length: %d, from: 0x%02x, to: 0x%02x, id: 0x%02x, header: 0x%02x, type: %s\n",
                   len, from, to, id, header,
                   get_message_type_string(get_message_type((char *)rf95_buf)));
@@ -458,15 +446,7 @@ void loop() {
             switch (type) {
                 // This case depends on changes in soil_sensor_common on the message_changes branch
                 // jhrg 6/25/23
-                case data_message: {  // New data message with type indicator
-                                      // Print received packet
-#if 0
-                    Serial.print(F("Data: "));
-                    Serial.print(data_message_to_string((data_message_t *)rf95_buf, /* pretty */ true));
-
-                    Serial.print(F(", "));
-#endif
-
+                case data_message: {  // New data message with type indicator; Print received packet
                     print("Data: %s\n", data_message_to_string((data_message_t *)rf95_buf, /* pretty */ true));
                     print_rfm95_info();
 
@@ -482,14 +462,6 @@ void loop() {
                 }
 
                 case text: {
-#if 0
-                    Serial.print(F("Got: "));
-                    // Add a null to the end of the packet and print as text
-                    //rf95_buf[len] = 0;
-                    Serial.println(text_message_to_string((text_t *)rf95_buf, true /*pretty*/));
-
-                    Serial.print(F("RFM95 info: "));
-#endif
                     print("Got: %s\n", text_message_to_string((text_t *)rf95_buf, true /*pretty*/));
 
                     print_rfm95_info();
@@ -505,11 +477,6 @@ void loop() {
 #endif
 
                 case time_request: {
-#if 0
-                    Serial.print(F("Time request: "));
-                    Serial.print(time_request_to_string((time_request_t *)rf95_buf, /* pretty */ true));
-                    Serial.print(F(", "));
-#endif
                     print("Time request: %s\n", time_request_to_string((time_request_t *)rf95_buf, /* pretty */ true));
                     print_rfm95_info();
 
