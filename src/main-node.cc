@@ -150,16 +150,21 @@ char *iso8601_date_time(DateTime &t) {
     @brief RF95 off the SPI bus to enable SD card access
 */
 void yield_spi_to_sd() {
+#if 1
     digitalWrite(RFM95_CS, HIGH);
     digitalWrite(SD_CS, LOW);
+#endif
 }
 
 /**
     @brief RF95 off the SPI bus to enable SD card access
 */
 void yield_spi_to_rf95() {
+#if 1
     digitalWrite(SD_CS, HIGH);
-    digitalWrite(RFM95_CS, LOW);
+    // This is somehow importamt... jhrg 9/13/26
+    //digitalWrite(RFM95_CS, LOW);
+#endif
 }
 
 /**
