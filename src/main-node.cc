@@ -147,36 +147,12 @@ char *iso8601_date_time(DateTime &t) {
     return date_time_str;
 }
 /**
-    @brief RF95 off the SPI bus to enable SD card access
-*/
-void yield_spi_to_sd() {
-#if 1
-    digitalWrite(RFM95_CS, HIGH);
-    digitalWrite(SD_CS, LOW);
-#endif
-}
-
-/**
-    @brief RF95 off the SPI bus to enable SD card access
-*/
-void yield_spi_to_rf95() {
-#if 1
-    digitalWrite(SD_CS, HIGH);
-    // This is somehow importamt... jhrg 9/13/26
-    //digitalWrite(RFM95_CS, LOW);
-#endif
-}
-
-/**
     @brief Write a header for the new log file.
     @param file_name open/create this file, append if it exists
-    @note Claim the SPI bus
 */
 void write_header(const char *file_name) {
     if (!sd_card_status)
         return;
-
-    yield_spi_to_sd();
 
     noInterrupts();  // disable interrupts
 
@@ -200,13 +176,11 @@ void write_header(const char *file_name) {
     write data to the log, append a new line
     @param file_name open for append
     @param data write this char string
-    @note Claim the SPI bus (calls yield_spi_to_sd()().
 */
 void log_data(const char *file_name, const char *data) {
     if (!sd_card_status)
         return;
 
-    yield_spi_to_sd();
     noInterrupts();  // disable interrupts
     bool opened = file.open(file_name, O_WRONLY | O_CREAT | O_APPEND);
     interrupts();  // enable interrupts
@@ -216,7 +190,6 @@ void log_data(const char *file_name, const char *data) {
         // re-init it and retry once before giving up. jhrg 9/12/26
         print("Failed to log data, error: 0x%02x. Re-initializing the SD card.\n", file.getError());
 
-        yield_spi_to_sd();
         if (!sd.begin(SD_CS, SPI_HALF_SPEED)) {
             sd.initErrorPrint(&Serial);
             sd_card_status = false;
@@ -281,8 +254,17 @@ void print_rfm95_info() {
 
 void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
+
+    // Deselect both SPI devices before any SPI activity starts. pinMode()
+    // does not guarantee an OUTPUT pin starts HIGH, and each device's own
+    // driver (RadioHead, SdFat) only asserts its CS for the duration of its
+    // own transactions - so without this, whichever device isn't yet
+    // initialized may sit selected (LOW) and corrupt the other's traffic on
+    // the shared bus. jhrg 9/13/26
     pinMode(RFM95_CS, OUTPUT);
+    digitalWrite(RFM95_CS, HIGH);
     pinMode(SD_CS, OUTPUT);
+    digitalWrite(SD_CS, HIGH);
 
     long start_time = millis();
     Serial.begin(BAUD_RATE);
@@ -302,11 +284,8 @@ void setup() {
 
     tft_setup();
 
-    // Initialize the SD card
-    yield_spi_to_sd();
-
-    // Initialize at the highest speed supported by the board that is
-    // not over 50 MHz. Try a lower speed if SPI errors occur.
+    // Initialize the SD card at the highest speed supported by the board
+    // that is not over 50 MHz. Try a lower speed if SPI errors occur.
     Serial.print(F("Initializing SD card..."));
 
     // A warm reset (as opposed to a full power cycle) can leave the SD card
@@ -336,8 +315,6 @@ void setup() {
 
     // Write data header.
     write_header(FILE_NAME);
-
-    yield_spi_to_rf95();
 
     Serial.print(F("Starting receiver..."));
 
@@ -417,8 +394,6 @@ void setup() {
  * @return True if the response was acknowledged, false if not.
  */
 bool send_response(uint8_t to, uint8_t *response, uint8_t size) {
-    yield_spi_to_rf95();
-
     bool ack_received = false;
     unsigned long start = millis();
     if (rf95_manager.sendtoWait(response, size, to)) {
@@ -444,8 +419,6 @@ uint8_t rf95_buf[RH_RF95_MAX_MESSAGE_LEN];
 #ifndef PIO_UNIT_TESTING
 
 void loop() {
-    yield_spi_to_rf95();
-
     if (rf95_manager.available()) {
         status_on();
 
