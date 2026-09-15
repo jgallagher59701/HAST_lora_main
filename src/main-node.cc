@@ -116,7 +116,7 @@ RTC_DS1307 real_time_clock;
 #define CODING_RATE 5
 // RH_CAD_DEFAULT_TIMEOUT 10seconds
 
-#define SD_CARD_MAX_TRIES 10
+#define SD_CARD_MAX_TRIES 3
 
 // Singleton instance of the radio driver
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
@@ -282,6 +282,10 @@ void setup() {
     int scl = I2C_SCL;
     Wire.begin(sda, scl);
 
+    // Initialize the TFT display and write the header to the screen. 
+    // Note that this sets the pin mode for the TFT CS (TFT_CS) pin,
+    // so it must be done before any SPI activity (SD card or LoRa) 
+    // that uses the same SPI bus.
     tft_setup();
 
     // Initialize the SD card at the highest speed supported by the board
