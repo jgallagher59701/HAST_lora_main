@@ -147,7 +147,7 @@ version. `pio run -e adafruit_feather_m0` succeeds; flash usage grew by 40 bytes
 ## TASK-004 — De-duplicate the `DATA_LINE_CHARS` definition
 
 **Category:** Code Cleanup
-**Status:** Open
+**Status:** In Progress
 **Created:** 2026-10-25
 **Related requirements/constraints:** NFR-006
 
@@ -169,6 +169,20 @@ that these are dead-code cleanup items, not incorrect behavior)
 Logged as a task rather than a bug per this repo's own convention (`BUG-###` is for
 deviations from intended behavior; dead/unused code is `TASK-###`). The user
 confirmed TASK-### over the original "bug" framing when asked.
+
+**2026-10-25 13:30** — "Work on TASKs 001 through 004. Put each on it's own branch
+- if reasonable (no conflicts) - work each in isolation."
+Correction to the original scope note: `TFTDisplay.cc` did not actually include
+`TFTDisplay.h` at all (despite defining functions declared there) — that's *why* the
+redefinition existed, not an oversight alongside an existing include. On branch
+`jhrg/task-004-dedupe-data-line-chars`, removed the local `#define DATA_LINE_CHARS
+161` from `TFTDisplay.cc`, added `#include "TFTDisplay.h"` so the constant (and the
+function declarations) come from one place, and added a comment on the remaining
+definition in `TFTDisplay.h` stating honestly that `161` is a historical value, not
+one derived from font/screen metrics (no commit or comment anywhere establishes a
+real derivation, so I didn't invent one). `pio run -e adafruit_feather_m0` succeeds
+with identical RAM/flash usage (9736 B / 72400 B). Status left at `In Progress` —
+only the user sets `Done`.
 
 ---
 
