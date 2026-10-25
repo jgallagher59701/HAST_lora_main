@@ -39,7 +39,7 @@ the last quarter that tests would have caught before merge.
 ## TASK-001 — Remove unused `DEBUG`/`DPRINT*` macros from `include/print.h`
 
 **Category:** Code Cleanup
-**Status:** Open
+**Status:** In Progress
 **Created:** 2026-10-25
 **Related requirements/constraints:** None
 
@@ -62,6 +62,14 @@ that these are dead-code cleanup items, not incorrect behavior)
 Logged as a task rather than a bug per this repo's own convention (`BUG-###` is for
 deviations from intended behavior; dead/unused code is `TASK-###`). The user
 confirmed TASK-### over the original "bug" framing when asked.
+
+**2026-10-25 13:30** — "Work on TASKs 001 through 004. Put each on it's own branch
+- if reasonable (no conflicts) - work each in isolation."
+Removed the `#if DEBUG`/`#else` block defining `DPRINTV`/`DPRINT`/`DPRINTF` and the
+RAM-usage comment describing them, on branch `jhrg/task-001-remove-dead-debug-macros`.
+`pio run -e adafruit_feather_m0` still succeeds with identical RAM/flash usage
+(9736 B / 72400 B). Left `print()`/`flush()` untouched since they're in active use.
+Status left at `In Progress` — only the user sets `Done`.
 
 ---
 
