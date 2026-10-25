@@ -18,6 +18,8 @@ Availability, Scalability, Usability, Maintainability, Compliance, Observability
 | NFR-005 | Availability | Main node waits for a USB host at boot before proceeding without one | <= 10 s | Could | Implemented |
 | NFR-006 | Observability | Main node's TFT keeps a scrolling log of recently received messages | 11 lines, up to 161 characters each | Could | Implemented |
 | NFR-007 | Reliability | Once battery-powered (FR-016), main node operates on its battery, unserviced, in the field | TBD | Must | Proposed |
+| NFR-008 | Maintainability | Firmware can be built and run on the RocketScream Mini Ultra Pro board, in addition to the Feather M0 | Builds and operates correctly on RocketScream hardware | Could | Proposed |
+| NFR-009 | Maintainability | Firmware can be built and run on an ESP8266 NodeMCU board, in addition to the Feather M0 | Builds and operates correctly on ESP8266 NodeMCU hardware | Could | Proposed — lower priority than `NFR-008` (RocketScream support preferred) |
 
 <!-- If you genuinely can't state a measurable target yet, write TBD in that column
      rather than a vague phrase — TBD is honest and searchable; "reasonably fast"
