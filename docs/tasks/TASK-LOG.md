@@ -36,6 +36,115 @@ the last quarter that tests would have caught before merge.
 
 ---
 
+## TASK-001 — Remove unused `DEBUG`/`DPRINT*` macros from `include/print.h`
+
+**Category:** Code Cleanup
+**Status:** Open
+**Created:** 2026-10-25
+**Related requirements/constraints:** None
+
+**Scope:** `include/print.h` defines `DPRINT`, `DPRINTV`, and `DPRINTF` behind an
+`#if DEBUG` guard. `DEBUG` is never defined anywhere in this project's
+`platformio.ini` or source, and none of the three macros are referenced anywhere in
+`src/` or `include/`. Remove the macros (and the `#if DEBUG`/`#else` scaffolding
+around them) from `print.h`. Does not include the rest of `print.h`/`print.cc` (the
+`print()`/`flush()` functions), which are in active use.
+
+**Motivation:** Carried over from another project (`nixies-3`, per the commit that
+introduced `print.cc`/`print.h`); dead conditional-compilation scaffolding that
+nothing in this codebase turns on, discovered while writing this repo's initial
+requirement docs.
+
+**Work Log**
+
+**2026-10-25 13:07** — "Lets make those bugs." (clarified to TASK-### after flagging
+that these are dead-code cleanup items, not incorrect behavior)
+Logged as a task rather than a bug per this repo's own convention (`BUG-###` is for
+deviations from intended behavior; dead/unused code is `TASK-###`). The user
+confirmed TASK-### over the original "bug" framing when asked.
+
+---
+
+## TASK-002 — Resolve the unfinished `frac()` macro in `include/print.h`
+
+**Category:** Code Cleanup
+**Status:** Open
+**Created:** 2026-10-25
+**Related requirements/constraints:** None
+
+**Scope:** `include/print.h` defines `frac(f)` with a `// TODO needs work` comment
+directly above it, and a second, commented-out version of the same macro sits right
+above that. `frac()` is not referenced anywhere else in `src/` or `include/`. Either
+finish it and put it to use, or delete both the live macro and the commented-out
+alternative.
+
+**Motivation:** An unused macro with an open `TODO` is easy to mistake for active
+functionality; discovered while writing this repo's initial requirement docs.
+
+**Work Log**
+
+**2026-10-25 13:07** — "Lets make those bugs." (clarified to TASK-### after flagging
+that these are dead-code cleanup items, not incorrect behavior)
+Logged as a task rather than a bug per this repo's own convention (`BUG-###` is for
+deviations from intended behavior; dead/unused code is `TASK-###`). The user
+confirmed TASK-### over the original "bug" framing when asked.
+
+---
+
+## TASK-003 — Remove or wire up the `VERSION` build flag
+
+**Category:** Code Cleanup
+**Status:** Open
+**Created:** 2026-10-25
+**Related requirements/constraints:** None
+
+**Scope:** `platformio.ini` sets `-D VERSION=1.5`, but no source file in `src/` or
+`include/` references the `VERSION` macro (no printed version string, no `#ifdef`
+branch on it). Either remove the build flag, or wire it into `setup()`'s startup
+banner the way a version flag would normally be used.
+
+**Motivation:** A build flag with no effect on the compiled firmware is misleading —
+it reads as configuration that matters when it currently does nothing; discovered
+while writing this repo's initial requirement docs.
+
+**Work Log**
+
+**2026-10-25 13:07** — "Lets make those bugs." (clarified to TASK-### after flagging
+that these are dead-code cleanup items, not incorrect behavior)
+Logged as a task rather than a bug per this repo's own convention (`BUG-###` is for
+deviations from intended behavior; dead/unused code is `TASK-###`). The user
+confirmed TASK-### over the original "bug" framing when asked.
+
+---
+
+## TASK-004 — De-duplicate the `DATA_LINE_CHARS` definition
+
+**Category:** Code Cleanup
+**Status:** Open
+**Created:** 2026-10-25
+**Related requirements/constraints:** NFR-006
+
+**Scope:** `DATA_LINE_CHARS` is defined as `161` in both `include/TFTDisplay.h:8`
+and again in `src/TFTDisplay.cc:93`, even though `TFTDisplay.cc` includes
+`TFTDisplay.h`. Remove the redundant redefinition in `TFTDisplay.cc` so the constant
+has one source of truth, and add a one-line comment on the remaining definition
+saying why `161` (display line width in the font/size `TFTDisplay.cc` draws with).
+
+**Motivation:** A silently duplicated constant is a latent bug waiting to happen —
+if the two definitions are ever changed independently they'd silently disagree, and
+there's currently no documented reason for the specific value of `161`; discovered
+while writing this repo's initial requirement docs.
+
+**Work Log**
+
+**2026-10-25 13:07** — "Lets make those bugs." (clarified to TASK-### after flagging
+that these are dead-code cleanup items, not incorrect behavior)
+Logged as a task rather than a bug per this repo's own convention (`BUG-###` is for
+deviations from intended behavior; dead/unused code is `TASK-###`). The user
+confirmed TASK-### over the original "bug" framing when asked.
+
+---
+
 <!-- Add new tasks via /plan-task, or by hand — keep the section format: metadata
      lines, then Scope / Motivation. Unlike a bug, a task doesn't need a symptom or
      reproduction — it needs a clear boundary of what's included and what isn't,
