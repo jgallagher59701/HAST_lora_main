@@ -276,7 +276,8 @@ void setup() {
         delay(ONE_SECOND);
     }
 
-    Serial.println(F("boot"));
+    Serial.print(F("boot, firmware version "));
+    Serial.println(VERSION);
 
     int sda = I2C_SDA;
     int scl = I2C_SCL;

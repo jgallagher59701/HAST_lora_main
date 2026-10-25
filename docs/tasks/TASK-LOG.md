@@ -111,7 +111,7 @@ the user sets `Done`.
 ## TASK-003 — Remove or wire up the `VERSION` build flag
 
 **Category:** Code Cleanup
-**Status:** Open
+**Status:** In Progress
 **Created:** 2026-10-25
 **Related requirements/constraints:** None
 
@@ -131,6 +131,16 @@ that these are dead-code cleanup items, not incorrect behavior)
 Logged as a task rather than a bug per this repo's own convention (`BUG-###` is for
 deviations from intended behavior; dead/unused code is `TASK-###`). The user
 confirmed TASK-### over the original "bug" framing when asked.
+
+**2026-10-25 13:30** — "Work on TASKs 001 through 004. Put each on it's own branch
+- if reasonable (no conflicts) - work each in isolation."
+Chose to wire `VERSION` into the startup banner rather than delete it, on branch
+`jhrg/task-003-wire-up-version-flag`: `-D VERSION=1.5` reads as an intentionally
+maintained value, so preserving and surfacing it seemed more useful than discarding
+it. `setup()`'s existing `Serial.println(F("boot"))` now also prints the firmware
+version. `pio run -e adafruit_feather_m0` succeeds; flash usage grew by 40 bytes
+(72400 -> 72440 B) from the added print call, RAM unchanged. Status left at
+`In Progress` — only the user sets `Done`.
 
 ---
 
