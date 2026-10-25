@@ -25,6 +25,7 @@ Priority: `Must` / `Should` / `Could` (MoSCoW). Status: `Proposed` / `Approved` 
 | FR-013 | Main node supports admitting a new leaf node via a join-request/join-response exchange that assigns it a node address | Could | | Proposed — message types are defined and unit-tested in the shared `soil_sensor_common` library, but the main-node handler (`src/main-node.cc`, `case join_request`) is an unimplemented stub, gated behind a `SUPPORT_JOIN` build flag that is off by default |
 | FR-014 | Main node handles a leaf-node-reported hardware/SD-card error message | Should | | Proposed — no handler exists for the `error` message type (falls through to the generic unrecognized-message branch); mirrors the leaf node's own FR-010, which is also still Proposed |
 | FR-015 | A host-side companion script (`PyNodeLog.py`) tails the main node's USB serial output and persists each line, timestamped, to a CSV file on a PC | Could | | Implemented (host-side tooling, not firmware) |
+| FR-016 | Main node can operate on battery power (e.g. D-cell), duty-cycling between low-power standby and LoRa-listening in synchrony with the leaf nodes' transmit schedule, for field deployments without mains power | Must | | Proposed — no standby/duty-cycle code exists today; main node currently listens continuously (see `IC-009`) |
 
 <!-- Add new rows via /new-requirement, or by hand — keep the table format. Each
      requirement should be a single testable statement, not a paragraph. If it needs

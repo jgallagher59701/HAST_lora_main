@@ -17,6 +17,7 @@ Availability, Scalability, Usability, Maintainability, Compliance, Observability
 | NFR-004 | Reliability | Main node recovers from a failed SD write by re-initializing the card | One re-init-and-retry cycle before giving up on that write | Should | Implemented |
 | NFR-005 | Availability | Main node waits for a USB host at boot before proceeding without one | <= 10 s | Could | Implemented |
 | NFR-006 | Observability | Main node's TFT keeps a scrolling log of recently received messages | 11 lines, up to 161 characters each | Could | Implemented |
+| NFR-007 | Reliability | Once battery-powered (FR-016), main node operates on its battery, unserviced, in the field | TBD | Must | Proposed |
 
 <!-- If you genuinely can't state a measurable target yet, write TBD in that column
      rather than a vague phrase — TBD is honest and searchable; "reasonably fast"
