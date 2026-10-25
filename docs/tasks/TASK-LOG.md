@@ -39,7 +39,7 @@ the last quarter that tests would have caught before merge.
 ## TASK-001 — Remove unused `DEBUG`/`DPRINT*` macros from `include/print.h`
 
 **Category:** Code Cleanup
-**Status:** In Progress
+**Status:** Done
 **Created:** 2026-10-25
 **Related requirements/constraints:** None
 
@@ -69,14 +69,19 @@ Removed the `#if DEBUG`/`#else` block defining `DPRINTV`/`DPRINT`/`DPRINTF` and 
 RAM-usage comment describing them, on branch `jhrg/task-001-remove-dead-debug-macros`.
 `pio run -e adafruit_feather_m0` still succeeds with identical RAM/flash usage
 (9736 B / 72400 B). Left `print()`/`flush()` untouched since they're in active use.
-Status left at `In Progress` — only the user sets `Done`.
+
+**2026-10-25 13:50** — "OK, merge all of those branches and close out the tasks
+once they are merged."
+Merged `jhrg/task-001-remove-dead-debug-macros` into `main` (fast-forward); combined
+build re-verified with `pio run -e adafruit_feather_m0`. Status set to `Done` per
+the user's explicit instruction.
 
 ---
 
 ## TASK-002 — Resolve the unfinished `frac()` macro in `include/print.h`
 
 **Category:** Code Cleanup
-**Status:** In Progress
+**Status:** Done
 **Created:** 2026-10-25
 **Related requirements/constraints:** None
 
@@ -103,15 +108,20 @@ Deleted the live `frac(f)` macro and the commented-out alternative above it, on
 branch `jhrg/task-002-resolve-frac-macro`. Chose deletion over finishing it: it has
 no caller anywhere in the codebase, and completing it would mean inventing a use for
 it that wasn't requested. `pio run -e adafruit_feather_m0` still succeeds with
-identical RAM/flash usage (9736 B / 72400 B). Status left at `In Progress` — only
-the user sets `Done`.
+identical RAM/flash usage (9736 B / 72400 B).
+
+**2026-10-25 13:50** — "OK, merge all of those branches and close out the tasks
+once they are merged."
+Merged `jhrg/task-002-resolve-frac-macro` into `main`; combined build re-verified
+with `pio run -e adafruit_feather_m0`. Status set to `Done` per the user's explicit
+instruction.
 
 ---
 
 ## TASK-003 — Remove or wire up the `VERSION` build flag
 
 **Category:** Code Cleanup
-**Status:** In Progress
+**Status:** Done
 **Created:** 2026-10-25
 **Related requirements/constraints:** None
 
@@ -139,15 +149,20 @@ Chose to wire `VERSION` into the startup banner rather than delete it, on branch
 maintained value, so preserving and surfacing it seemed more useful than discarding
 it. `setup()`'s existing `Serial.println(F("boot"))` now also prints the firmware
 version. `pio run -e adafruit_feather_m0` succeeds; flash usage grew by 40 bytes
-(72400 -> 72440 B) from the added print call, RAM unchanged. Status left at
-`In Progress` — only the user sets `Done`.
+(72400 -> 72440 B) from the added print call, RAM unchanged.
+
+**2026-10-25 13:50** — "OK, merge all of those branches and close out the tasks
+once they are merged."
+Merged `jhrg/task-003-wire-up-version-flag` into `main`; combined build re-verified
+with `pio run -e adafruit_feather_m0`. Status set to `Done` per the user's explicit
+instruction.
 
 ---
 
 ## TASK-004 — De-duplicate the `DATA_LINE_CHARS` definition
 
 **Category:** Code Cleanup
-**Status:** In Progress
+**Status:** Done
 **Created:** 2026-10-25
 **Related requirements/constraints:** NFR-006
 
@@ -181,8 +196,13 @@ function declarations) come from one place, and added a comment on the remaining
 definition in `TFTDisplay.h` stating honestly that `161` is a historical value, not
 one derived from font/screen metrics (no commit or comment anywhere establishes a
 real derivation, so I didn't invent one). `pio run -e adafruit_feather_m0` succeeds
-with identical RAM/flash usage (9736 B / 72400 B). Status left at `In Progress` —
-only the user sets `Done`.
+with identical RAM/flash usage (9736 B / 72400 B).
+
+**2026-10-25 13:50** — "OK, merge all of those branches and close out the tasks
+once they are merged."
+Merged `jhrg/task-004-dedupe-data-line-chars` into `main`; combined build
+re-verified with `pio run -e adafruit_feather_m0`. Status set to `Done` per the
+user's explicit instruction.
 
 ---
 
