@@ -48,6 +48,7 @@
 
 #include "data_packet.h"  // Decode information in a data packet
 #include "messages.h"
+#include "TFTDisplay.h"
 
 // For the breakout board, you can use any 2 or 3 pins.
 // These pins will also work for the 1.8" TFT shield.
@@ -89,8 +90,6 @@ void tft_display_header()
 
     tft.drawFastHLine(2, 13, tft.width()-4, ST77XX_RED);
 }
-
-#define DATA_LINE_CHARS 161
 
 /**
  * @brief Write decoded packet values to display to 'text'

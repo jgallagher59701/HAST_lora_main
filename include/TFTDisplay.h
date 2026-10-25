@@ -5,6 +5,9 @@
 #include "data_packet.h"
 #include "messages.h"
 
+// Size of the buffer used to hold one formatted display/log line of text.
+// 161 is a generous historical value, not derived from the TFT's font metrics
+// or screen width.
 #define DATA_LINE_CHARS 161
 
 void tft_setup();
