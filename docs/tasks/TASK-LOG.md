@@ -68,7 +68,7 @@ confirmed TASK-### over the original "bug" framing when asked.
 ## TASK-002 — Resolve the unfinished `frac()` macro in `include/print.h`
 
 **Category:** Code Cleanup
-**Status:** Open
+**Status:** In Progress
 **Created:** 2026-10-25
 **Related requirements/constraints:** None
 
@@ -88,6 +88,15 @@ that these are dead-code cleanup items, not incorrect behavior)
 Logged as a task rather than a bug per this repo's own convention (`BUG-###` is for
 deviations from intended behavior; dead/unused code is `TASK-###`). The user
 confirmed TASK-### over the original "bug" framing when asked.
+
+**2026-10-25 13:30** — "Work on TASKs 001 through 004. Put each on it's own branch
+- if reasonable (no conflicts) - work each in isolation."
+Deleted the live `frac(f)` macro and the commented-out alternative above it, on
+branch `jhrg/task-002-resolve-frac-macro`. Chose deletion over finishing it: it has
+no caller anywhere in the codebase, and completing it would mean inventing a use for
+it that wasn't requested. `pio run -e adafruit_feather_m0` still succeeds with
+identical RAM/flash usage (9736 B / 72400 B). Status left at `In Progress` — only
+the user sets `Done`.
 
 ---
 
