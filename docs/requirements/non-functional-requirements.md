@@ -11,7 +11,12 @@ Availability, Scalability, Usability, Maintainability, Compliance, Observability
 
 | ID | Category | Requirement | Measurable Target | Priority | Status |
 |---|---|---|---|---|---|
-| _EXAMPLE_ | Performance | Read-endpoint latency stays low under normal load | p95 < 300 ms at 100 req/s | Must | _delete this row_ |
+| NFR-001 | Reliability | Main node retries a reliable LoRa send before giving up | 2 retries (reduced from RadioHead's library default of 3) | Should | Implemented |
+| NFR-002 | Performance | Main node waits for an ACK on a reliable LoRa send before treating it as failed | 400 ms timeout (measured on-air time at SF10/CR 4-5/BW 125 kHz is ~207-327 ms) | Should | Implemented |
+| NFR-003 | Reliability | Main node retries SD-card initialization at boot before declaring the card failed | Up to 3 attempts, 500 ms apart | Should | Implemented |
+| NFR-004 | Reliability | Main node recovers from a failed SD write by re-initializing the card | One re-init-and-retry cycle before giving up on that write | Should | Implemented |
+| NFR-005 | Availability | Main node waits for a USB host at boot before proceeding without one | <= 10 s | Could | Implemented |
+| NFR-006 | Observability | Main node's TFT keeps a scrolling log of recently received messages | 11 lines, up to 161 characters each | Could | Implemented |
 
 <!-- If you genuinely can't state a measurable target yet, write TBD in that column
      rather than a vague phrase — TBD is honest and searchable; "reasonably fast"
