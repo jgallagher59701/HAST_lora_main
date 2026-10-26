@@ -206,6 +206,96 @@ user's explicit instruction.
 
 ---
 
+## TASK-005 — Give each message type a self-consistent CSV log row shape
+
+**Category:** Code Cleanup
+**Status:** Open
+**Created:** 2026-10-25
+**Related requirements/constraints:** FR-002, FR-003, FR-005 describe that
+`data_message`, `text`, and `time_request` are each logged to the SD card, but none
+of them specify the row's column layout — this task doesn't contradict any of them.
+
+**Scope:** The `log_data()` calls in `src/main-node.cc` for `time_request`
+(`time request, <node>`, from `time_request_to_string()`) and `text` (`<node>,
+<message text>`, from `text_message_to_string()`) write rows that don't match the
+8-column header written once at boot (`Node, Message, Time, Battery V, Last TX Dur
+ms, Temp C, Hum %, Status`), which only describes `data_message` rows. Give each
+message type either its own consistent, self-describing row shape — e.g. a leading
+type/column-count discriminator, or per-type headers — so a CSV reader doesn't have
+to infer a row's shape from its column count. Does not include changing the on-wire
+packet/message formats in `soil_sensor_common` (`data_packet.h`/`messages.h`), and
+does not include the `data_message` row shape itself, which already matches its
+header.
+
+**Motivation:** Discovered while writing the `HAST_lora_main` README — any tool
+reading `Sensor_data.csv` currently has to branch on column count or re-derive the
+message type rather than trusting the header, since the header only describes one
+of three row shapes present in the file.
+
+---
+
+## TASK-006 — Display `text` messages on the TFT
+
+**Category:** Other
+**Status:** Plan Ready
+**Created:** 2026-10-25
+**Plan:** `plans/task-text-messages-on-tft-plan.md`
+**Related requirements/constraints:** FR-009 ("Main node displays received
+leaf-node readings and time requests as a scrolling log on an attached TFT
+display") currently scopes the TFT to `data_message` and `time_request` only — it
+does not mention `text`. This task would extend behavior beyond what FR-009
+currently documents; flagging that rather than silently treating it as in-scope
+maintenance. If this is wanted as permanent behavior, consider amending FR-009 (or
+adding a new FR) via `/new-requirement` alongside this task.
+
+**Scope:** `src/main-node.cc`'s `case text:` branch (in `loop()`) currently only
+calls `print()` (serial) and `log_data()` (SD) — unlike `data_message` and
+`time_request`, it never calls `tft_display_data()`. Add a TFT line for received
+`text` messages, formatted via a new `tft_*` helper in `TFTDisplay.cc`/`.h`
+consistent with the existing `tft_get_data_line()` / `tft_time_request()` helpers.
+Does not include redesigning the TFT's scrolling-line layout (`MAX_LINE`, line
+height, etc.) or changing what's logged to SD/serial for `text` messages.
+
+**Motivation:** Requested by the user after the `HAST_lora_main` README's "on the
+display vs. in the log" section noted that `text` messages are the one message type
+with no TFT representation at all.
+
+---
+
+## TASK-007 — Log the serial-only diagnostic fields to the SD card
+
+**Category:** Other
+**Status:** Plan Ready
+**Created:** 2026-10-25
+**Plan:** `plans/task-log-serial-diagnostics-plan.md`
+**Related requirements/constraints:** FR-012 ("Main node reports LoRa link-quality
+metrics ... over USB serial for each received application message") documents
+RSSI/SNR/packet-count reporting as serial-only, by design. This task would extend
+that beyond FR-012's current scope; flagging that rather than silently treating it
+as in-scope maintenance. If wanted as permanent behavior, consider amending FR-012
+(or adding a new FR) via `/new-requirement` alongside this task.
+
+**Scope:** Three groups of fields that `src/main-node.cc` currently sends only to
+`print()`/`Serial`, never to `log_data()`/SD:
+1. LoRa link-quality metrics from `print_rfm95_info()` — RSSI, SNR, good/bad packet
+   counts.
+2. Raw RadioHead framing fields from each `recvfromAck()` call — `len`, `from`,
+   `to`, `id`, `header`.
+3. Boot-time diagnostics printed in `setup()` — firmware version, SD card
+   init/retry outcome, LoRa radio init/frequency result, RTC startup status.
+
+Add these to the SD log (exact row/column format TBD in the plan — may depend on how
+TASK-005 resolves the per-type row-shape question). Does not include changing what's
+shown on the TFT, and does not include the unrecognized-message hex dump, which
+`docs/requirements/use-cases.md` documents as serial-only by design.
+
+**Motivation:** Requested by the user after the `HAST_lora_main` README noted these
+fields are only visible with a serial monitor attached live — a bench session not
+actively watched loses this information permanently, since it's never persisted to
+the SD card.
+
+---
+
 <!-- Add new tasks via /plan-task, or by hand — keep the section format: metadata
      lines, then Scope / Motivation. Unlike a bug, a task doesn't need a symptom or
      reproduction — it needs a clear boundary of what's included and what isn't,
