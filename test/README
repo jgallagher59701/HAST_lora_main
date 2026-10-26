@@ -1,5 +1,5 @@
 
-Set up opertation of the unit tests involves some less than obvious
+Set up operation of the unit tests involves some less than obvious
 things.
 
 The unit tests that do not build and download code to a MCU are tests
@@ -8,7 +8,7 @@ To build code in this env, the 'native' env must be installed:
 
     pio platform install native
 
-The tests are written liks just about any set of unit tests. Look in
+The tests are written like just about any set of unit tests. Look in
 this directory.
 
 However, for tests to work with a local library (one in the 'lib'
